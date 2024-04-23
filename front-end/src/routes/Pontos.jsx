@@ -1,5 +1,3 @@
-const Pontos = () => {
-
-}
+const Pontos = () => {};
 
 export default Pontos;
