@@ -58,3 +58,9 @@
 .link:hover{
     color: #41798B;
 }
+
+p{
+    margin-top: 5px;
+    text-align: center;
+    font-size: smaller;
+}

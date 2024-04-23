@@ -13,7 +13,7 @@ const Navbar = () => {
       { text: "Sobre Nós", url: "/login" },
       { text: "Contato", url: "/login" },
     ];
-    buttonNav = [];
+    buttonNav = [{ text: "Login", url: "/login" }];
   } else if (location.pathname == "/trajetos") {
     links = [
       { text: "Trajetos", url: "/trajetos" },
