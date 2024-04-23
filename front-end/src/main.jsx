@@ -5,11 +5,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import { createBrowserRouter, RouterProvider, Router } from "react-router-dom";
 
-import Home from "./routes/Home.jsx";
-import Login from "./routes/Login.jsx";
-import Register from "./routes/Register.jsx";
-import Trajetos from "./routes/Trajetos.jsx";
-import Pontos from "./routes/Pontos.jsx";
+import Home from "./routes/Home/Home.jsx";
+import Login from "./routes/Login/Login.jsx";
+import Register from "./routes/Register/Register.jsx";
+import Trajetos from "./routes/Trajetos/Trajetos.jsx";
+import Pontos from "./routes/Pontos/Pontos.jsx";
 
 const router = createBrowserRouter([
   {

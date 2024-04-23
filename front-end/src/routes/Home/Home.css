@@ -24,17 +24,20 @@ body{
 
 .title{
     font-family: 'Roboto Condensed', sans-serif;
-    font-size: 95px;
+    font-weight: 300;
+    font-size: 90px;
     text-shadow: 0px 4px 3px rgb(0, 0, 1);
 }
+
 
 .description{
     width: 50%;
     margin: 0 auto;
     margin-top: 40px;
     font-family: 'Roboto', sans-serif;
-    font-size: 20px;
     font-weight: 300;
+    font-size: 20px;
+
 }
 
 .btn{
