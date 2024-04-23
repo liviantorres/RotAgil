@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import "bootstrap/dist/css/bootstrap.min.css";
 
 import { createBrowserRouter, RouterProvider, Router } from "react-router-dom";
 
@@ -12,37 +11,36 @@ import Register from "./routes/Register.jsx";
 import Trajetos from "./routes/Trajetos.jsx";
 import Pontos from "./routes/Pontos.jsx";
 
-
 const router = createBrowserRouter([
   {
     element: <App />,
     children: [
       {
         path: "/",
-        element: <Home/>
+        element: <Home />,
       },
       {
         path: "/login",
-        element: <Login/>
+        element: <Login />,
       },
       {
         path: "/register",
-        element: <Register/>
+        element: <Register />,
       },
       {
         path: "/trajetos",
-        element: <Trajetos/>
+        element: <Trajetos />,
       },
       {
         path: "/pontos",
-        element: <Pontos/>
-      }
+        element: <Pontos />,
+      },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
