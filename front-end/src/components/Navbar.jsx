@@ -33,8 +33,17 @@ const Navbar = () => {
     buttonNav = [];
   }else if(location.pathname == '/trajetos'){
     links = [
-      { text: "Trajetos", url: "/" },
-      { text: "Pontos", url: "/" }
+      { text: "Trajetos", url: "/trajetos" },
+      { text: "Pontos", url: "/pontos" }
+    ];
+
+    buttonNav = [
+      { text: "", url: "/" }
+    ]
+  }else if(location.pathname == '/pontos'){
+    links = [
+      { text: "Trajetos", url: "/trajetos" },
+      { text: "Pontos", url: "/pontos" }
     ];
 
     buttonNav = [
