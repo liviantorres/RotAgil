@@ -1,4 +1,4 @@
-package com.example.backend.exceptions;
+package com.example.backend.exceptions.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
