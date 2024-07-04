@@ -22,5 +22,7 @@ public class Company {
     @NotBlank
     private String name;
     @NotBlank
+    private String email;
+    @NotBlank
     private String password;
 }
