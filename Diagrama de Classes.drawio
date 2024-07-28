@@ -1,0 +1,84 @@
+<mxfile host="app.diagrams.net" modified="2024-03-17T16:17:31.682Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="DCr69CuhO8YlDFkowyfR" version="24.0.7" type="google">
+  <diagram name="Página-1" id="ebUe_Y3OsJe9pYlNTLCE">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="rIA1VrvyzRtkCgRyme4n-1" value="Domínio" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="480" width="160" height="180" as="geometry">
+            <mxRectangle x="270" y="460" width="100" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rIA1VrvyzRtkCgRyme4n-2" value="nome: string&lt;div&gt;email: string&lt;/div&gt;&lt;div&gt;senha: string&lt;/div&gt;&lt;div&gt;trajetos: list&amp;lt;Trajeto&amp;gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="rIA1VrvyzRtkCgRyme4n-1">
+          <mxGeometry y="26" width="160" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="rIA1VrvyzRtkCgRyme4n-3" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="rIA1VrvyzRtkCgRyme4n-1">
+          <mxGeometry y="90" width="160" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="rIA1VrvyzRtkCgRyme4n-4" value="editar_nome(nome): null&amp;nbsp;&lt;div&gt;editar_email(email): null&lt;/div&gt;&lt;div&gt;editar_senha(senha): null&lt;/div&gt;&lt;div&gt;excluir_conta(): null&lt;/div&gt;&lt;div&gt;visualizar_dados(): null&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="rIA1VrvyzRtkCgRyme4n-1">
+          <mxGeometry y="98" width="160" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="gjToUqreZk56l9ovg7Ta-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="rIA1VrvyzRtkCgRyme4n-14" target="rIA1VrvyzRtkCgRyme4n-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rIA1VrvyzRtkCgRyme4n-14" value="Trajeto" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="438" width="190" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="rIA1VrvyzRtkCgRyme4n-15" value="nome_trajeto: string&lt;div&gt;ponto_de_partida: Ponto&lt;/div&gt;&lt;div&gt;rotas: list&amp;lt;Rota&amp;gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="rIA1VrvyzRtkCgRyme4n-14">
+          <mxGeometry y="26" width="190" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="rIA1VrvyzRtkCgRyme4n-16" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="rIA1VrvyzRtkCgRyme4n-14">
+          <mxGeometry y="80" width="190" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="rIA1VrvyzRtkCgRyme4n-17" value="gerar_percurso(ponto_de_partida, rotas): Percurso&lt;div&gt;editar_nome_trajeto(nome): null&lt;/div&gt;&lt;div&gt;excluir_trajeto(trajeto): null&lt;/div&gt;&lt;div&gt;criar_trajeto(): Trajeto&lt;/div&gt;&lt;div&gt;visualizar_trajetos(): list&amp;lt;Trajeto&amp;gt;&lt;/div&gt;&lt;div&gt;qtd_rotas(): int&amp;nbsp;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="rIA1VrvyzRtkCgRyme4n-14">
+          <mxGeometry y="88" width="190" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="rIA1VrvyzRtkCgRyme4n-18" value="Rota" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="840" y="438" width="180" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="rIA1VrvyzRtkCgRyme4n-19" value="&lt;div&gt;ponto1 = Ponto&lt;/div&gt;&lt;div&gt;ponto2 = Ponto&lt;/div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;distância = float&lt;/span&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="rIA1VrvyzRtkCgRyme4n-18">
+          <mxGeometry y="26" width="180" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="rIA1VrvyzRtkCgRyme4n-20" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="rIA1VrvyzRtkCgRyme4n-18">
+          <mxGeometry y="80" width="180" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="rIA1VrvyzRtkCgRyme4n-21" value="editar_ponto1(ponto1): null&lt;div&gt;editar_ponto2(ponto2): null&lt;/div&gt;&lt;div&gt;excluir_rota(Rota): null&lt;/div&gt;&lt;div&gt;visualizar_rotas(): list&amp;lt;Rota&amp;gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="rIA1VrvyzRtkCgRyme4n-18">
+          <mxGeometry y="88" width="180" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="CL-z2rANnwgyQ5WtSuGN-1" value="Ponto" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="443" width="160" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="CL-z2rANnwgyQ5WtSuGN-2" value="nome: string&lt;div&gt;endereço: string&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="CL-z2rANnwgyQ5WtSuGN-1">
+          <mxGeometry y="26" width="160" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="CL-z2rANnwgyQ5WtSuGN-3" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="CL-z2rANnwgyQ5WtSuGN-1">
+          <mxGeometry y="70" width="160" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="CL-z2rANnwgyQ5WtSuGN-4" value="editar_ponto(): null&lt;div&gt;excluir_ponto(Ponto): null&lt;/div&gt;&lt;div&gt;visualizar_pontos(): list&amp;lt;Ponto&amp;gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="CL-z2rANnwgyQ5WtSuGN-1">
+          <mxGeometry y="78" width="160" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="gjToUqreZk56l9ovg7Ta-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="gjToUqreZk56l9ovg7Ta-1" target="rIA1VrvyzRtkCgRyme4n-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gjToUqreZk56l9ovg7Ta-1" value="Percurso" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="495" y="200" width="260" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="gjToUqreZk56l9ovg7Ta-2" value="grafo_percurso: grafo&lt;div&gt;lista_ordenada_pontos: list&amp;lt;Rota&amp;gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gjToUqreZk56l9ovg7Ta-1">
+          <mxGeometry y="26" width="260" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="gjToUqreZk56l9ovg7Ta-3" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gjToUqreZk56l9ovg7Ta-1">
+          <mxGeometry y="60" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gjToUqreZk56l9ovg7Ta-4" value="soma_distancia(list&amp;lt;Rota&amp;gt;): float&lt;div&gt;algoritmo_dijkstra(list&amp;lt;Rota&amp;gt;, ponto_partida): list_ordened&amp;lt;Rota&amp;gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gjToUqreZk56l9ovg7Ta-1">
+          <mxGeometry y="68" width="260" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="gjToUqreZk56l9ovg7Ta-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="rIA1VrvyzRtkCgRyme4n-19" target="rIA1VrvyzRtkCgRyme4n-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gjToUqreZk56l9ovg7Ta-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="CL-z2rANnwgyQ5WtSuGN-2" target="rIA1VrvyzRtkCgRyme4n-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
