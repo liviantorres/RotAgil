@@ -10,19 +10,19 @@ import lombok.Setter;
 public class Node implements Comparable<Node> {
     public String name;
     public Node previous;
-    public double minDistance = Double.POSITIVE_INFINITY;
+    public long minDistance = Long.MAX_VALUE;
     public ArrayList<Edge> adjacencies = new ArrayList<>();
 
     public Node(String name){
         this.name = name;
     }
 
-    public void addEdge(Node targetNode, Double weight, String nam) {
+    public void addEdge(Node targetNode, Long weight, String nam) {
         this.adjacencies.add(new Edge(weight, targetNode, name));
     }
 
     public int compareTo(Node nodeAux) {
-        return Double.compare(this.minDistance, nodeAux.minDistance);
+        return Long.compare(this.minDistance, nodeAux.minDistance);
     }
 
     public String toString() {

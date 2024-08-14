@@ -13,7 +13,7 @@ import com.example.backend.entities.Node;
 @Service
 public class PathService {
     public void computePaths(Node source) {
-        source.minDistance = 0.;
+        source.minDistance = 0;
         PriorityQueue<Node> nodeQueue = new PriorityQueue<>();
         nodeQueue.add(source);
 
@@ -23,8 +23,8 @@ public class PathService {
             // Visit each edge exiting u
             for (Edge e : u.adjacencies) {
                 Node v = e.target;
-                double weight = e.weight;
-                double distanceThroughU = u.minDistance + weight;
+                long weight = e.weight;
+                long distanceThroughU = u.minDistance + weight;
                 if (distanceThroughU < v.minDistance) {
                     nodeQueue.remove(v);
                     v.minDistance = distanceThroughU;

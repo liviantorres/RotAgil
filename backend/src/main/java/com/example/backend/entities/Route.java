@@ -16,11 +16,9 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotBlank
-    @ManyToMany
-    private DeliveryPoint initialDeliveryPoint;
+    private Long initialDeliveryPoint;
     @NotBlank
-    @ManyToMany
-    private DeliveryPoint destinationDeliveryPoint;
+    private Long destinationDeliveryPoint;
     @NotBlank
     private int distance;
     @JsonIgnore

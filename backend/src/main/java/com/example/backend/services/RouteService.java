@@ -46,21 +46,6 @@ public class RouteService {
 
     @Transactional
     public void create(CreateRouteRequestDTO dto) {
-
-        Optional<DeliveryPoint> initialDeliveryPoint = Optional.ofNullable(
-                deliveryPointRepository.findById(dto.initialDeliveryPointId())
-                        .orElseThrow(
-                                () -> new MessageNotFoundException("Ponto de entrega não encontrada")
-                        )
-        );
-
-        Optional<DeliveryPoint> destinationDeliveryPoint = Optional.ofNullable(
-                deliveryPointRepository.findById(dto.destinationDeliveryPointId())
-                        .orElseThrow(
-                                () -> new MessageNotFoundException("Ponto de entrega não encontrada")
-                        )
-        );
-
         Optional<Road> road = Optional.ofNullable(
                 this.roadRepository.findById(dto.roadId()).orElseThrow(
                         () -> new MessageNotFoundException("Rota não encontrada")
@@ -70,8 +55,8 @@ public class RouteService {
         this.routeRepository.findByInitialDeliveryPointAndDestinationDeliveryPoint(dto.initialDeliveryPointId(), dto.destinationDeliveryPointId()).ifPresent((user) -> { throw new MessageBadRequestException("Rota já existe"); });
 
         Route route = new Route();
-        route.setInitialDeliveryPoint(initialDeliveryPoint.get());
-        route.setDestinationDeliveryPoint(destinationDeliveryPoint.get());
+        route.setInitialDeliveryPoint(dto.initialDeliveryPointId());
+        route.setDestinationDeliveryPoint(dto.destinationDeliveryPointId());
         route.setDistance(dto.distance());
         route.setRoad(road.get());
 
@@ -90,22 +75,8 @@ public class RouteService {
                                 () -> new MessageNotFoundException("Rota não encontrada")
                         ));
 
-        Optional<DeliveryPoint> initialDeliveryPoint = Optional.ofNullable(
-                deliveryPointRepository.findById(dto.initialDeliveryPointId())
-                        .orElseThrow(
-                                () -> new MessageNotFoundException("Ponto de entrega não encontrada")
-                        )
-        );
-
-        Optional<DeliveryPoint> destinationDeliveryPoint = Optional.ofNullable(
-                deliveryPointRepository.findById(dto.destinationDeliveryPointId())
-                        .orElseThrow(
-                                () -> new MessageNotFoundException("Ponto de entrega não encontrada")
-                        )
-        );
-
-        route.get().setInitialDeliveryPoint(initialDeliveryPoint.get());
-        route.get().setDestinationDeliveryPoint(destinationDeliveryPoint.get());
+        route.get().setInitialDeliveryPoint(dto.initialDeliveryPointId());
+        route.get().setDestinationDeliveryPoint(dto.initialDeliveryPointId());
 
         if (dto.distance() != 0)
             route.get().setDistance(dto.distance());

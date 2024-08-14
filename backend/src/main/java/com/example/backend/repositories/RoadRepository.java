@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 import com.example.backend.entities.Road;
 
 @Repository
-public interface RoadRepository extends JpaRepository<Road, UUID>  {
+public interface RoadRepository extends JpaRepository<Road, Long>  {
     Optional<Road> findByName(String name);
 }

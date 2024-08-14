@@ -12,6 +12,7 @@ import com.example.backend.exceptions.types.MessageNotFoundException;
 import com.example.backend.repositories.RoadRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.foreign.Linker.Option;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,7 +36,7 @@ public class RoadService {
     }
 
     @Transactional(readOnly = true)
-    public RoadResponseDTO getById(UUID id) {
+    public RoadResponseDTO getById(Long id) {
         Optional<Road> road = Optional.ofNullable(
             this.roadRepository.findById(id).orElseThrow(
                 () -> new MessageNotFoundException("Rota não encontrada")
@@ -53,7 +54,7 @@ public class RoadService {
     }
 
     @Transactional
-    public void update(UpdateRoadRequestDTO dto, UUID id) {
+    public void update(UpdateRoadRequestDTO dto, Long id) {
         Optional<Road> road = Optional.ofNullable(
             this.roadRepository.findById(id).orElseThrow(
                 () -> new MessageNotFoundException("Rota não encontrada")
@@ -73,7 +74,7 @@ public class RoadService {
     }
 
     @Transactional
-    public void delete(UUID id) {
+    public void delete(Long id) {
         Optional<Road> company = Optional.ofNullable(
             this.roadRepository.findById(id).orElseThrow(
                 () -> new MessageNotFoundException("Rota não encontrada")
