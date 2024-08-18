@@ -42,21 +42,21 @@ public class ExceptionHandlerController {
     @ResponseBody
     @ExceptionHandler(MessageNotFoundException.class)
     public ResponseEntity<MessageExceptionHandlerDTO> messageNotFound(MessageNotFoundException exception){
-        MessageExceptionHandlerDTO error = new MessageExceptionHandlerDTO(new Date(), HttpStatus.NOT_FOUND.value(), exception.getMessage());
+        MessageExceptionHandlerDTO error = new MessageExceptionHandlerDTO(new Date(), Long.valueOf(HttpStatus.NOT_FOUND.value()), exception.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ResponseBody
     @ExceptionHandler(MessageBadRequestException.class)
     public ResponseEntity<MessageExceptionHandlerDTO> messageBadRequest(MessageBadRequestException exception){
-        MessageExceptionHandlerDTO error = new MessageExceptionHandlerDTO(new Date(), HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+        MessageExceptionHandlerDTO error = new MessageExceptionHandlerDTO(new Date(), Long.valueOf(HttpStatus.BAD_REQUEST.value()), exception.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ResponseBody
     @ExceptionHandler(MessageUnauthorizedException.class)
     public ResponseEntity<MessageExceptionHandlerDTO> messageUnauthorized(MessageUnauthorizedException exception){
-        MessageExceptionHandlerDTO error = new MessageExceptionHandlerDTO(new Date(), HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
+        MessageExceptionHandlerDTO error = new MessageExceptionHandlerDTO(new Date(), Long.valueOf(HttpStatus.UNAUTHORIZED.value()), exception.getMessage());
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 }
