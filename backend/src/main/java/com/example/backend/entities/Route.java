@@ -23,5 +23,6 @@ public class Route {
     private int distance;
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "road_id")
     private Road road;
 }

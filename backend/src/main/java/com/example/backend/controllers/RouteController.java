@@ -1,8 +1,8 @@
 package com.example.backend.controllers;
 
 import com.example.backend.dtos.CreateRouteRequestDTO;
+import com.example.backend.dtos.RouteResponseDTO;
 import com.example.backend.dtos.UpdateRouteRequestDTO;
-import com.example.backend.entities.Route;
 import com.example.backend.services.RouteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +20,12 @@ public class RouteController {
     private RouteService routeService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Route> getById(@PathVariable Long id){
+    public ResponseEntity<RouteResponseDTO> getById(@PathVariable Long id){
         return ResponseEntity.ok(routeService.getById(id));
     }
 
     @GetMapping("/road/{id}")
-    public ResponseEntity<List<Route>> getAllByRoadId(@PathVariable Long id){
+    public ResponseEntity<List<RouteResponseDTO>> getAllByRoadId(@PathVariable Long id){
         return ResponseEntity.ok(routeService.getAllByRoadId(id));
     }
 

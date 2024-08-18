@@ -2,17 +2,16 @@ package com.example.backend.controllers;
 
 import com.example.backend.dtos.*;
 import com.example.backend.entities.Road;
-import com.example.backend.services.CompanyService;
 import com.example.backend.services.RoadService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,36 +21,32 @@ public class RoadController {
     private RoadService roadService;
 
     @PostMapping
-    public ResponseEntity create(@Valid @RequestBody CreateRoadRequestDTO dto) {
-        roadService.create(dto);
+    public ResponseEntity create(@Valid @RequestBody CreateRoadRequestDTO dto, HttpServletRequest request) {
+        Object companyId = request.getAttribute("company_id");
+        roadService.create(dto, UUID.fromString(companyId.toString()));
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @GetMapping("/id")
-    public ResponseEntity<RoadResponseDTO> getById(HttpServletRequest request){
-        Object id = request.getAttribute("road_id");
-        
-        RoadResponseDTO response = this.roadService.getById((Long) id);
-
-        return ResponseEntity.ok().body(response);
-
+    @GetMapping("/{id}")
+    public ResponseEntity<Road> getById(@PathVariable Long id){
+        return ResponseEntity.ok().body(this.roadService.getById(id));
     }
 
-    @PutMapping
-    public ResponseEntity update(@RequestBody UpdateRoadRequestDTO dto, HttpServletRequest request) {
-        Object id = request.getAttribute("road_id");
+    @GetMapping
+    public ResponseEntity<List<Road>> getAllByCompanyId(HttpServletRequest request){
+        Object companyId = request.getAttribute("company_id");
+        return ResponseEntity.ok().body(this.roadService.getAllByCompanyId(UUID.fromString(companyId.toString())));
+    }
 
-        roadService.update(dto, (Long) id);
-
+    @PutMapping("/{id}")
+    public ResponseEntity update(@PathVariable Long id, @RequestBody UpdateRoadRequestDTO dto) {
+        roadService.update(dto, id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping
-    public ResponseEntity delete(HttpServletRequest request) {
-        Object id = request.getAttribute("road_id");
-
-        roadService.delete((Long) id);
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        roadService.delete(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

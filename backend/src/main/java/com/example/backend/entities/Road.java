@@ -1,17 +1,14 @@
 package com.example.backend.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.Min;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "road")
 @Getter
@@ -23,16 +20,16 @@ public class Road {
     private Long id;
     @NotBlank
     private String name;
-    @NotBlank
-    @Min(0)
-    private Long length;
-    @NotBlank
-    private String startAddress;
-    @NotBlank
-    private String endAddress;
-    @NotBlank
-    @Min(0)
-    private Long estimatedTime;
-    @OneToMany
-    private Route routes[];
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "road_route",
+            joinColumns = @JoinColumn(name = "road_id"),
+            inverseJoinColumns = @JoinColumn(name = "route_id")
+    )
+    private List<Route> routes = new ArrayList<>();
 }

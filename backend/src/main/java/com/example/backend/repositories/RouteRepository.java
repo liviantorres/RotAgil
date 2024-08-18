@@ -1,6 +1,5 @@
 package com.example.backend.repositories;
 
-import com.example.backend.entities.DeliveryPoint;
 import com.example.backend.entities.Route;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +12,7 @@ import java.util.Optional;
 public interface RouteRepository extends JpaRepository<Route, Long> {
     @Query(value = "SELECT * FROM route WHERE initial_delivery_point_id = :initialDeliveryPointId AND " +
             "destination_delivery_point_id = :destinationDeliveryPointId", nativeQuery = true)
-    Optional<Object> findByInitialDeliveryPointAndDestinationDeliveryPoint(Long initialDeliveryPointId, Long destinationDeliveryPointId);
+    Optional<Route> findByInitialDeliveryPointAndDestinationDeliveryPoint(Long initialDeliveryPointId, Long destinationDeliveryPointId);
 
     @Query(value = "SELECT * FROM route WHERE road_id = :roadId", nativeQuery = true)
     List<Route> findByRoad(Long roadId);
