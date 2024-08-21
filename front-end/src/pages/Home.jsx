@@ -2,13 +2,13 @@ import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { Link } from "react-router-dom";
 
-// Estilos globais
+
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
     background-color: #252525;
-    overflow-x: hidden; /* Evita rolagem horizontal indesejada */
+    overflow-x: hidden;
     width: 100vw;
     height: 100vh;
   }

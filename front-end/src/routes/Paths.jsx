@@ -5,13 +5,14 @@ import Home from "../pages/Home";
 import NotFound from "../pages/NotFound"
 import Register from "../pages/Register";
 import Login from "../pages/Login";
+import Trajetos from "../pages/Trajetos"
 
 const Paths = () => {
     return ( 
         <>
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<PageLayout NavType = 'home' />}>
+                <Route path="/" element={<PageLayout NavType = 'register' />}>
                     <Route index element={<Home/>}/>
                 </Route>
                 <Route  path="/register" element={<PageLayout NavType = 'register' />}>
@@ -19,6 +20,9 @@ const Paths = () => {
                 </Route>
                 <Route  path="/login" element={<PageLayout NavType = 'login' />}>
                     <Route index element={<Login/>}/>
+                </Route>
+                <Route  path="/trajetos" element={<PageLayout NavType = 'home' />}>
+                    <Route index element={<Trajetos/>}/>
                 </Route>
                 
                 <Route path="*" element={<NotFound/>}/>

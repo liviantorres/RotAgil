@@ -1,16 +1,23 @@
 import React from "react";
-import "./Trajetos.css";
+import styled from "styled-components";
+
+const TrajetoContainer = styled.div`
+  background-color: #1F2121;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+`
 
 const Trajetos = () => {
   return (
-    <div>
-      <div className="body">
+    <TrajetoContainer>
+      
         <h1 className="trajetos">Trajetos</h1>
         <button className="newPath">
           <img className="botao-adc" src="/botao-adc.png" alt="" /> Novo Trajeto
         </button>
-      </div>
-    </div>
+      
+    </TrajetoContainer>
   );
 };
 
