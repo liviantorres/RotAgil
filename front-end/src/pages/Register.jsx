@@ -5,12 +5,12 @@ import axios from "axios";
 const Register = () => {
   const [errors, setErrors] = useState([]);
 
-  const handleRegister = async ({ dominio, email, password }) => {
+  const handleRegister = async ({ name, email, password }) => {
     setErrors([]); 
 
     try {
       const response = await axios.post("http://localhost:8080/company", {
-        name: dominio,
+        name,
         email,
         password,
       });

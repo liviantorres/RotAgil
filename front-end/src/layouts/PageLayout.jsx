@@ -45,9 +45,7 @@ const PageLayout = ({ NavType }) => {
       
       <div style={{ flex: 1 }}>
         <Navbar links={links} button={button} />
-        <div style={{ padding: '20px' }}>
           <Outlet />
-        </div>
       </div>
     </LayoutContainer>
   );
