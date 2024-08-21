@@ -17,7 +17,7 @@ const PageLayout = ({ NavType }) => {
 
   let button = {};
 
-  if (NavType === 'home' || NavType === 'register') {
+  if (NavType === 'register') {
     button = {
       type: 'button',
       text: 'Login',
@@ -29,6 +29,15 @@ const PageLayout = ({ NavType }) => {
       { href: '/login', text: 'Sobre Nós'},
       { href: '/login', text: 'Contato'},
     ];
+  }else if(NavType === 'home'){
+    links = [
+      {href: '/trajetos', text: 'Trajetos'},
+      {href: '/pontos', text: 'Pontos'}
+    ];
+    button = {
+      type: '',
+      text:'',
+    }
   }
 
   return (
@@ -36,9 +45,7 @@ const PageLayout = ({ NavType }) => {
       
       <div style={{ flex: 1 }}>
         <Navbar links={links} button={button} />
-        <div style={{ padding: '20px' }}>
           <Outlet />
-        </div>
       </div>
     </LayoutContainer>
   );
