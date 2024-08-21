@@ -16,6 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/road")
+@CrossOrigin(origins = "http://localhost:5173")
 public class RoadController {
     @Autowired
     private RoadService roadService;

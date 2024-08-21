@@ -20,11 +20,13 @@ public class SecurityConfig {
     private SecurityFilter securityFilter;
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/company/auth").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/company").permitAll();
+                    auth
+                            .requestMatchers("/company/auth").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/company").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(this.securityFilter, BasicAuthenticationFilter.class);
