@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const FormContainer = styled.div`
   background-color: #e6e6e6;
@@ -11,14 +12,14 @@ const FormContainer = styled.div`
   padding: 30px;
   width: 100%;
   max-width: 400px;
-  box-sizing: border-box; /* Inclui padding e border na largura total */
-  font-family: 'Roboto', sans-serif;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
 `;
 
 const ContainerInputs = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: stretch; /* Garante que os filhos usem toda a largura disponível */
+  align-items: stretch;
   width: 100%;
 `;
 
@@ -28,7 +29,7 @@ const Logo = styled.img`
 `;
 
 const Title = styled.h2`
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 22px;
   border-bottom: 1px solid #1f2121;
   padding-bottom: 10px;
@@ -40,7 +41,7 @@ const FormField = styled.div`
 `;
 
 const Label = styled.label`
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   margin-bottom: 2px;
   display: block;
 `;
@@ -52,7 +53,7 @@ const Input = styled.input`
   padding: 12px;
   border: none;
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box; 
+  box-sizing: border-box;
   outline: none;
 `;
 
@@ -60,12 +61,12 @@ const Button = styled.button`
   width: 100%;
   padding: 12px;
   border-radius: 6px;
-  margin-top: 40px;
+  margin-top: 20px;
   margin-bottom: 20px;
   background-color: #354b57;
   color: #fff;
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
-  border: none; 
+  border: none;
   box-sizing: border-box;
 
   &:hover {
@@ -75,59 +76,121 @@ const Button = styled.button`
   }
 `;
 
+const ErrorList = styled.ul`
+  color: #FF0000;
+  font-size: smaller;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const ErrorItem = styled.li`
+  margin-bottom: 5px;
+`;
+
 const Paragraph = styled.p`
   margin-top: 5px;
   text-align: center;
   font-size: smaller;
 `;
 
-const LinkStyled = styled.a`
+const LinkStyled = styled(Link)`
+  color: #5499AE;
   text-decoration: none;
-  color: #5499ae;
-  font-weight: bold;
-
+  font-weight:bold;
   &:hover {
-    color: #41798b;
+    cursor: pointer;
   }
 `;
 
-const Forms = ({ type }) => {
-  const isLogin = type === "Login";
+const Forms = ({ type, onSubmit, errors: propErrors }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState(propErrors || []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newErrors = [];
+
+    if (!name || !email || !password) newErrors.push("Preencha todas as informações");
+    
+    if (newErrors.length > 0) {
+      setErrors(newErrors);
+    } else {
+      setErrors([]); // Clear errors if valid
+      onSubmit({ name, email, password }).catch((err) => {
+        // Handle server-side validation errors
+        setErrors(err.response?.data?.errors || ["Erro ao enviar dados."]);
+      });
+    }
+  };
 
   return (
     <FormContainer>
       <Logo src="/logo.png" alt="Logo" />
-      <Title>{isLogin ? "Login" : "Registro"}</Title>
-      
-      <ContainerInputs>
-        {!isLogin && (
+      <Title>{type === "Login" ? "Login" : "Registro"}</Title>
+
+      <form onSubmit={handleSubmit}>
+        <ContainerInputs>
+          {type === "Register" && (
+            <FormField>
+              <Label htmlFor="name">Domínio:</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Universidade Federal do Ceará"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </FormField>
+          )}
+
           <FormField>
-            <Label htmlFor="dominio">Domínio:</Label>
-            <Input id="dominio" type="text" placeholder="Universidade Federal do Ceará" />
+            <Label htmlFor="email">Email:</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="ufc@crateus.ufc.br"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </FormField>
-        )}
-        
-        <FormField>
-          <Label htmlFor="email">Email:</Label>
-          <Input id="email" type="email" placeholder="ufc@crateus.ufc.br" />
-        </FormField>
-        
-        <FormField>
-          <Label htmlFor="password">Senha:</Label>
-          <Input id="password" type="password" placeholder="UFC@78$Ki!" />
-        </FormField>
-        
-        <Button>{isLogin ? "Entrar" : "Registrar"}</Button>
-      </ContainerInputs>
+
+          <FormField>
+            <Label htmlFor="password">Senha:</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="UFC@78$Ki!"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </FormField>
+          {errors.length > 0 && (
+        <ErrorList>
+          {errors.map((error, index) => (
+            <ErrorItem key={index}>{error}</ErrorItem>
+          ))}
+        </ErrorList>
+      )}
+          <Button type="submit">
+            {type === "Login" ? "Entrar" : "Registrar"}
+          </Button>
+        </ContainerInputs>
+      </form>
+
+      
 
       <Paragraph>
-        {isLogin ? (
+        {type === "Login" ? (
           <>
-            Não tem uma conta? <LinkStyled href="/register">Cadastre-se</LinkStyled>
+            Não tem uma conta? <LinkStyled to="/register">Cadastre-se</LinkStyled>
           </>
         ) : (
           <>
-            Já tem uma conta? <LinkStyled href="/login">Entre aqui</LinkStyled>
+            Já tem uma conta? <LinkStyled to="/login">Entre aqui</LinkStyled>
           </>
         )}
       </Paragraph>
