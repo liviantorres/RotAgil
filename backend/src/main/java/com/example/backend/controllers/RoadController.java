@@ -2,6 +2,7 @@ package com.example.backend.controllers;
 
 import com.example.backend.dtos.*;
 import com.example.backend.entities.Road;
+import com.example.backend.services.PathService;
 import com.example.backend.services.RoadService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +21,8 @@ import java.util.UUID;
 public class RoadController {
     @Autowired
     private RoadService roadService;
+    @Autowired
+    private PathService pathService;
 
     @PostMapping
     public ResponseEntity create(@Valid @RequestBody CreateRoadRequestDTO dto, HttpServletRequest request) {
@@ -49,5 +52,10 @@ public class RoadController {
     public ResponseEntity delete(@PathVariable Long id) {
         roadService.delete(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/path")
+    public ResponseEntity<GeneratePathResponseDTO> generatePath(@Valid @RequestBody GeneratePathRequestDTO dto){
+        return ResponseEntity.ok().body(pathService.generateRoute(dto));
     }
 }

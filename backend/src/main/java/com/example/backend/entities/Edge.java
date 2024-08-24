@@ -6,13 +6,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Edge {
-    public Long weight;
+    public int weight;
     public Node target;
-    public String name;
 
-    public Edge(Long weight, Node target, String name){
+    public Edge(int weight, Node target){
         this.weight = weight;
         this.target = target;
-        this.name = name;
     }
 }
