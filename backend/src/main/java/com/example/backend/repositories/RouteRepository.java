@@ -16,4 +16,8 @@ public interface RouteRepository extends JpaRepository<Route, Long> {
 
     @Query(value = "SELECT * FROM route WHERE road_id = :roadId", nativeQuery = true)
     List<Route> findByRoad(Long roadId);
+
+    @Query(value = "SELECT * FROM route WHERE initial_delivery_point_id = :deliveryPointId OR " +
+            "destination_delivery_point_id = :deliveryPointId", nativeQuery = true)
+    List<Route> findByInitialDeliveryPointOrDestinationDeliveryPoint(Long deliveryPointId);
 }

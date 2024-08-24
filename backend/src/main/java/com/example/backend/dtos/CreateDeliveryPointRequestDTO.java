@@ -1,6 +1,7 @@
 package com.example.backend.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-public record CreateDeliveryPointRequestDTO (@NotBlank Long roadId, @NotBlank String name, @NotBlank String address) {
+public record CreateDeliveryPointRequestDTO (@NotNull Long roadId, @NotBlank @NotNull String name, @NotBlank @NotNull String address) {
 }

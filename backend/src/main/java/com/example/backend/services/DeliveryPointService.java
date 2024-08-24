@@ -8,6 +8,7 @@ import com.example.backend.exceptions.types.MessageBadRequestException;
 import com.example.backend.exceptions.types.MessageNotFoundException;
 import com.example.backend.repositories.DeliveryPointRepository;
 import com.example.backend.repositories.RoadRepository;
+import com.example.backend.repositories.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,8 @@ public class DeliveryPointService {
     private DeliveryPointRepository deliveryPointRepository;
     @Autowired
     private RoadRepository roadRepository;
+    @Autowired
+    private RouteRepository routeRepository;
 
     @Transactional(readOnly = true)
     public DeliveryPoint getById(Long id) {
@@ -75,6 +78,10 @@ public class DeliveryPointService {
 
     @Transactional
     public void delete(Long id) {
+
+        if (!this.routeRepository.findByInitialDeliveryPointOrDestinationDeliveryPoint(id).isEmpty())
+            throw new MessageBadRequestException("Ponto de entrega está vinculado a uma rota");
+
         Optional<DeliveryPoint> deliveryPoint = Optional.ofNullable(
                 this.deliveryPointRepository.findById(id)
                         .orElseThrow(

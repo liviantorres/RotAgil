@@ -4,10 +4,16 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.backend.dtos.*;
 import com.example.backend.entities.Company;
+import com.example.backend.entities.DeliveryPoint;
+import com.example.backend.entities.Road;
+import com.example.backend.entities.Route;
 import com.example.backend.exceptions.types.MessageBadRequestException;
 import com.example.backend.exceptions.types.MessageNotFoundException;
 import com.example.backend.exceptions.types.MessageUnauthorizedException;
 import com.example.backend.repositories.CompanyRepository;
+import com.example.backend.repositories.DeliveryPointRepository;
+import com.example.backend.repositories.RoadRepository;
+import com.example.backend.repositories.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.naming.AuthenticationException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,7 +33,13 @@ public class CompanyService {
     private String secretKey;
 
     @Autowired
+    private RoadRepository roadRepository;
+    @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private RouteRepository routeRepository;
+    @Autowired
+    private DeliveryPointRepository deliveryPointRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -105,6 +118,16 @@ public class CompanyService {
                         .orElseThrow(
                                 () -> new MessageNotFoundException("Empresa não encontrada")
                         ));
+
+        List<Road> roads = this.roadRepository.findAllByCompanyId(id);
+        roads.forEach(road -> {
+            List<Route> routes = this.routeRepository.findByRoad(road.getId());
+            this.routeRepository.deleteAll(routes);
+
+            List<DeliveryPoint> deliveryPoints = this.deliveryPointRepository.findByRoad(road.getId());
+            this.deliveryPointRepository.deleteAll(deliveryPoints);
+        });
+        this.roadRepository.deleteAll(roads);
 
         this.companyRepository.delete(company.get());
     }

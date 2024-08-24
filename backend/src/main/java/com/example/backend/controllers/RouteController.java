@@ -37,7 +37,7 @@ public class RouteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Long id, @RequestBody UpdateRouteRequestDTO dto) {
+    public ResponseEntity update(@PathVariable Long id, @Valid @RequestBody UpdateRouteRequestDTO dto) {
 
         routeService.update(dto, id);
 

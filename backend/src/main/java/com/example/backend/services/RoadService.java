@@ -1,7 +1,11 @@
 package com.example.backend.services;
 
 import com.example.backend.entities.Company;
+import com.example.backend.entities.DeliveryPoint;
+import com.example.backend.entities.Route;
 import com.example.backend.repositories.CompanyRepository;
+import com.example.backend.repositories.DeliveryPointRepository;
+import com.example.backend.repositories.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +27,10 @@ public class RoadService {
     private RoadRepository roadRepository;
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private RouteRepository routeRepository;
+    @Autowired
+    private DeliveryPointRepository deliveryPointRepository;
 
     @Transactional
     public void create(CreateRoadRequestDTO dto, UUID companyId) {
@@ -79,6 +87,12 @@ public class RoadService {
                 () -> new MessageNotFoundException("Rota não encontrada")
             )
         );
+
+        List<Route> routes = this.routeRepository.findByRoad(id);
+        this.routeRepository.deleteAll(routes);
+
+        List<DeliveryPoint> deliveryPoints = this.deliveryPointRepository.findByRoad(id);
+        this.deliveryPointRepository.deleteAll(deliveryPoints);
 
         this.roadRepository.delete(road.get());
     }
