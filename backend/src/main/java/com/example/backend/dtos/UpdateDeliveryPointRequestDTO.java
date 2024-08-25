@@ -1,4 +1,7 @@
 package com.example.backend.dtos;
 
-public record UpdateDeliveryPointRequestDTO(String name, String address) {
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record UpdateDeliveryPointRequestDTO(@Schema(example = "ponto 1") String name,
+                                            @Schema(example = "rua") String address) {
 }

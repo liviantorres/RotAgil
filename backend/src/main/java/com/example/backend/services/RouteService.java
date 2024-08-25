@@ -96,7 +96,7 @@ public class RouteService {
 
         Optional<Road> road = Optional.ofNullable(
                 this.roadRepository.findById(dto.roadId()).orElseThrow(
-                        () -> new MessageNotFoundException("Rota não encontrada")
+                        () -> new MessageNotFoundException("Trajeto não encontrado")
                 )
         );
 

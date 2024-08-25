@@ -34,7 +34,7 @@ public class RoadService {
 
     @Transactional
     public void create(CreateRoadRequestDTO dto, UUID companyId) {
-        this.roadRepository.findByNameAndCompanyId(dto.name(), companyId).ifPresent((user) -> { throw new MessageBadRequestException("Rota com mesmo nome já existe"); });
+        this.roadRepository.findByNameAndCompanyId(dto.name(), companyId).ifPresent((user) -> { throw new MessageBadRequestException("Trajeto com mesmo nome já existe"); });
 
         Optional<Company> company = Optional.ofNullable(
                 this.companyRepository.findById(companyId)
@@ -58,7 +58,7 @@ public class RoadService {
     public Road getById(Long id) {
         Optional<Road> road = Optional.ofNullable(
             this.roadRepository.findById(id).orElseThrow(
-                () -> new MessageNotFoundException("Rota não encontrada")
+                () -> new MessageNotFoundException("Trajeto não encontrado")
             )
         );
 
@@ -69,7 +69,7 @@ public class RoadService {
     public void update(UpdateRoadRequestDTO dto, Long id) {
         Optional<Road> road = Optional.ofNullable(
             this.roadRepository.findById(id).orElseThrow(
-                () -> new MessageNotFoundException("Rota não encontrada")
+                () -> new MessageNotFoundException("Trajeto não encontrada")
             )
         );
 
@@ -84,7 +84,7 @@ public class RoadService {
     public void delete(Long id) {
         Optional<Road> road = Optional.ofNullable(
             this.roadRepository.findById(id).orElseThrow(
-                () -> new MessageNotFoundException("Rota não encontrada")
+                () -> new MessageNotFoundException("Trajeto não encontrado")
             )
         );
 
