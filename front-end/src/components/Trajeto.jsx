@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const ContainerTrajeto = styled.div`
   background-color: #343838;
-  padding: 20px; 
+  padding: 10px; 
   border-radius: 8px; 
   box-shadow: 0px 10px 16px rgba(0, 0, 0, 0.2); 
   color: #fff; 

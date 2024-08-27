@@ -6,6 +6,7 @@ import NotFound from "../pages/NotFound"
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import Trajetos from "../pages/Trajetos"
+import Perfil from "../pages/Perfil";
 
 const Paths = () => {
     return ( 
@@ -23,6 +24,9 @@ const Paths = () => {
                 </Route>
                 <Route  path="/trajetos" element={<PageLayout NavType = 'home' />}>
                     <Route index element={<Trajetos/>}/>
+                </Route>
+                <Route  path="/perfil" element={<PageLayout NavType = 'home' />}>
+                    <Route index element={<Perfil/>}/>
                 </Route>
                 
                 <Route path="*" element={<NotFound/>}/>
