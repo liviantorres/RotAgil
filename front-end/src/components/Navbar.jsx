@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-
-
 const NavbarContainer = styled.div`
   background-color: #1f2121;
   color: #fff;
@@ -37,12 +35,6 @@ const LinkItem = styled.h2`
   }
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 20px;
-`;
-
 const Button = styled.button`
   display: flex;
   justify-content: center;
@@ -63,25 +55,21 @@ const Button = styled.button`
   }
 `;
 
-const ButtonLink = styled.a`
-  text-decoration: none;
-  color: #fff;
-  font-size: 20px;
-  font-family: 'Roboto', sans-serif;
-  display: flex;
-  align-items: center;
-  padding: 10px 50px;
-  background-color: #3f3f3f;
-  border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+const ProfileImage = styled.img`
+  width: 50px; 
+  height: 50px;
+  border-radius: 50%; 
+  cursor: pointer;
   margin-left: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
 
   &:hover {
-    background-color: #1f2121;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
   }
 `;
 
-const Navbar = ({ links, button }) => {
+const Navbar = ({ links, button, profileImage }) => {
   return (
     <NavbarContainer>
       <LinksContainer>
@@ -91,17 +79,15 @@ const Navbar = ({ links, button }) => {
           </LinkItem>
         ))}
       </LinksContainer>
-      <ButtonContainer>
-        {button.type === 'link' ? (
-          <ButtonLink href={button.href}>
-            {button.text}
-          </ButtonLink>
-        ) : (
-          <Button onClick={button.onClick}>
-            {button.text}
-          </Button>
-        )}
-      </ButtonContainer>
+      {profileImage ? (
+        <a href={button.href}>
+          <ProfileImage src={profileImage} alt="Profile" />
+        </a>
+      ) : (
+        <Button onClick={button.onClick}>
+          {button.text}
+        </Button>
+      )}
     </NavbarContainer>
   );
 };
@@ -118,7 +104,8 @@ Navbar.propTypes = {
     href: PropTypes.string,
     onClick: PropTypes.func,
     text: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  profileImage: PropTypes.string
 };
 
 export default Navbar;
