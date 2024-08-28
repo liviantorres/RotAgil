@@ -10,13 +10,15 @@ const Register = () => {
 
     try {
       const response = await axios.post("http://localhost:8080/company", {
-        name,
+   
         email,
+        name,
         password,
       });
 
       if (response.status === 201) {
-        alert("Empresa cadastrada com sucesso!");
+        alert("Registro bem-sucedido! Você pode agora fazer login.");
+        window.location.href = '/login';
       }
     } catch (error) {
       const errorMessages = [];
