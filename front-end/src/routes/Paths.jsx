@@ -29,8 +29,7 @@ const Paths = () => {
           <Route path="/perfil" element={<PageLayout NavType="home" />}>
             <Route index element={<Perfil />} />
           </Route>
-          {/* Adicionando o parâmetro :id para a rota */}
-          <Route path="/rotas/:id" element={<PageLayout NavType="home" />}>
+          <Route path="/rotas/:trajetoId" element={<PageLayout NavType="home" />}>
             <Route index element={<Rotas />} />
           </Route>
           <Route path="*" element={<NotFound />} />

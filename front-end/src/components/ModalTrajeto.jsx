@@ -62,12 +62,12 @@ const ModalTrajeto = ({ onClose, onSave }) => {
 
   const handleSave = async () => {
     const token = localStorage.getItem('authToken'); 
-
+  
     if (!token) {
       console.error('Token de acesso não encontrado!');
       return;
     }
-
+  
     try {
       const response = await axios.post('http://localhost:8080/road', {
         name: nomeTrajeto,
@@ -76,9 +76,17 @@ const ModalTrajeto = ({ onClose, onSave }) => {
           'Authorization': `Bearer ${token}`, 
         }
       });
-
+  
       if (response.status === 201) {
-        onSave(response.data); 
+    
+        const newTrajeto = response.data;
+       
+        const trajetoFormatado = {
+          id: newTrajeto.id, 
+          name: newTrajeto.name
+        };
+  
+        onSave(trajetoFormatado); 
         setNomeTrajeto('');
       } else {
         console.error('Falha ao criar o trajeto', response.statusText);
@@ -88,6 +96,7 @@ const ModalTrajeto = ({ onClose, onSave }) => {
     }
     onClose();
   };
+  
 
   return (
     <ModalOverlay>

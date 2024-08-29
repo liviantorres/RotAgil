@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import axios from "axios";
-import Trajeto from "../components/Trajeto";
-import Modal from "../components/ModalTrajeto";
-import { useNavigate } from "react-router-dom"; 
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
+import Trajeto from '../components/Trajeto';
+import Modal from '../components/ModalTrajeto';
+import { useNavigate } from 'react-router-dom';
 
 const TrajetoContainer = styled.div`
   background-color: #252525;
@@ -90,11 +90,17 @@ const Trajetos = () => {
   }, []);
 
   const handleAddTrajeto = (newTrajeto) => {
-    setTrajetos((prevTrajetos) => [...prevTrajetos, newTrajeto]); 
-    setModalOpen(false); 
-  };
-
+    console.log('Novo trajeto recebido:', newTrajeto);
   
+    if (newTrajeto && newTrajeto.id && newTrajeto.name) {
+      setTrajetos((prevTrajetos) => [...prevTrajetos, newTrajeto]);
+    } else {
+      console.error('Trajeto inválido:', newTrajeto);
+    }
+    setModalOpen(false);
+  };
+  
+
   const handleTrajetoClick = (id) => {
     navigate(`/rotas/${id}`); 
   };
@@ -113,7 +119,7 @@ const Trajetos = () => {
       <ListaTrajeto>
         {trajetos.map((trajeto) => (
           <Trajeto
-            key={trajeto.id}
+            key={trajeto.id} 
             nomeTrajeto={trajeto.name}
             rotas={trajeto.rotas || []} 
             onClick={() => handleTrajetoClick(trajeto.id)} 
