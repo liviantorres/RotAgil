@@ -98,7 +98,7 @@ const Paragraph = styled.p`
 const LinkStyled = styled(Link)`
   color: #5499AE;
   text-decoration: none;
-  font-weight:bold;
+  font-weight: bold;
   &:hover {
     cursor: pointer;
   }
@@ -114,14 +114,15 @@ const Forms = ({ type, onSubmit, errors: propErrors }) => {
     e.preventDefault();
     const newErrors = [];
 
-    if (!name || !email || !password) newErrors.push("Preencha todas as informações");
+    if (type === "Register" && !name) newErrors.push("O nome é obrigatório");
+    if (!email) newErrors.push("O email é obrigatório");
+    if (!password) newErrors.push("A senha é obrigatória");
     
     if (newErrors.length > 0) {
       setErrors(newErrors);
     } else {
-      setErrors([]); // Clear errors if valid
+      setErrors([]); 
       onSubmit({ name, email, password }).catch((err) => {
-        // Handle server-side validation errors
         setErrors(err.response?.data?.errors || ["Erro ao enviar dados."]);
       });
     }
@@ -136,7 +137,7 @@ const Forms = ({ type, onSubmit, errors: propErrors }) => {
         <ContainerInputs>
           {type === "Register" && (
             <FormField>
-              <Label htmlFor="name">Domínio:</Label>
+              <Label htmlFor="name">Nome:</Label>
               <Input
                 id="name"
                 type="text"
@@ -169,19 +170,17 @@ const Forms = ({ type, onSubmit, errors: propErrors }) => {
             />
           </FormField>
           {errors.length > 0 && (
-        <ErrorList>
-          {errors.map((error, index) => (
-            <ErrorItem key={index}>{error}</ErrorItem>
-          ))}
-        </ErrorList>
-      )}
+            <ErrorList>
+              {errors.map((error, index) => (
+                <ErrorItem key={index}>{error}</ErrorItem>
+              ))}
+            </ErrorList>
+          )}
           <Button type="submit">
             {type === "Login" ? "Entrar" : "Registrar"}
           </Button>
         </ContainerInputs>
       </form>
-
-      
 
       <Paragraph>
         {type === "Login" ? (

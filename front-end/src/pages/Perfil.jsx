@@ -180,7 +180,6 @@ const Perfil = () => {
   };
 
   const handleDeleteConfirm = () => {
-    // Adicione a lógica para a exclusão da conta aqui
     alert("Conta excluída!");
     setShowConfirmDelete(false);
   };
