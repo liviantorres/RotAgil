@@ -94,7 +94,7 @@ public class CompanyService {
     }
 
     @Transactional
-    public void update(UpdateCompanyRequestDTO dto, UUID id) {
+    public CompanyResponseDTO update(UpdateCompanyRequestDTO dto, UUID id) {
         Optional<Company> company = Optional.ofNullable(
                 this.companyRepository.findById(id)
                         .orElseThrow(
@@ -109,6 +109,8 @@ public class CompanyService {
             company.get().setPassword(this.passwordEncoder.encode(dto.password()));
 
         this.companyRepository.save(company.get());
+
+        return new CompanyResponseDTO(company.get().getId(), company.get().getName(), company.get().getEmail());
     }
 
     @Transactional
@@ -123,11 +125,11 @@ public class CompanyService {
         roads.forEach(road -> {
             List<Route> routes = this.routeRepository.findByRoad(road.getId());
             this.routeRepository.deleteAll(routes);
-
-            List<DeliveryPoint> deliveryPoints = this.deliveryPointRepository.findByRoad(road.getId());
-            this.deliveryPointRepository.deleteAll(deliveryPoints);
         });
         this.roadRepository.deleteAll(roads);
+
+        List<DeliveryPoint> deliveryPoints = this.deliveryPointRepository.findAllByCompany(company.get().getId());
+        this.deliveryPointRepository.deleteAll(deliveryPoints);
 
         this.companyRepository.delete(company.get());
     }

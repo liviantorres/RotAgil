@@ -73,17 +73,17 @@ public class CompanyController {
     @PutMapping
     @Operation(summary = "Editar cadastro da empresa", description = "Essa função é responsável por editar as informações de uma empresa")
     @ApiResponses({
-            @ApiResponse(responseCode = "204"),
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = CompanyResponseDTO.class))}),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada", content =
             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageExceptionHandlerDTO.class)))
     })
     @SecurityRequirement(name = "jwt_auth")
-    public ResponseEntity update(@RequestBody UpdateCompanyRequestDTO dto, HttpServletRequest request) {
+    public ResponseEntity<CompanyResponseDTO> update(@RequestBody UpdateCompanyRequestDTO dto, HttpServletRequest request) {
         Object id = request.getAttribute("company_id");
 
-        companyService.update(dto, UUID.fromString(id.toString()));
+        CompanyResponseDTO response = companyService.update(dto, UUID.fromString(id.toString()));
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping

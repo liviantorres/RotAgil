@@ -36,7 +36,7 @@ public class RoadController {
     @PostMapping
     @Operation(summary = "Criar trajeto", description = "Essa função é responsável por criar um novo trajeto")
     @ApiResponses({
-            @ApiResponse(responseCode = "201"),
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Road.class))}),
             @ApiResponse(responseCode = "400", description = "Trajeto com mesmo nome já existe", content =
             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageExceptionHandlerDTO.class))),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada", content =
@@ -44,10 +44,10 @@ public class RoadController {
             @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ErrorMessageDTO.class))))
     })
     @SecurityRequirement(name = "jwt_auth")
-    public ResponseEntity create(@Valid @RequestBody CreateRoadRequestDTO dto, HttpServletRequest request) {
+    public ResponseEntity<Road> create(@Valid @RequestBody CreateRoadRequestDTO dto, HttpServletRequest request) {
         Object companyId = request.getAttribute("company_id");
-        roadService.create(dto, UUID.fromString(companyId.toString()));
-        return new ResponseEntity(HttpStatus.CREATED);
+        Road response = roadService.create(dto, UUID.fromString(companyId.toString()));
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/{id}")
@@ -76,14 +76,14 @@ public class RoadController {
     @PutMapping("/{id}")
     @Operation(summary = "Editar trajeto", description = "Essa função é responsável por editar as informações de um trajeto pelo id")
     @ApiResponses({
-            @ApiResponse(responseCode = "204"),
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Road.class))}),
             @ApiResponse(responseCode = "404", description = "Trajeto não encontrada", content =
             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageExceptionHandlerDTO.class)))
     })
     @SecurityRequirement(name = "jwt_auth")
-    public ResponseEntity update(@PathVariable Long id, @RequestBody UpdateRoadRequestDTO dto) {
-        roadService.update(dto, id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Road> update(@PathVariable Long id, @RequestBody UpdateRoadRequestDTO dto) {
+        Road response = roadService.update(dto, id);
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/{id}")

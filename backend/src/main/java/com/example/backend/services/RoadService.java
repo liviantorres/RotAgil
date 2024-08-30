@@ -1,10 +1,8 @@
 package com.example.backend.services;
 
 import com.example.backend.entities.Company;
-import com.example.backend.entities.DeliveryPoint;
 import com.example.backend.entities.Route;
 import com.example.backend.repositories.CompanyRepository;
-import com.example.backend.repositories.DeliveryPointRepository;
 import com.example.backend.repositories.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,11 +27,9 @@ public class RoadService {
     private CompanyRepository companyRepository;
     @Autowired
     private RouteRepository routeRepository;
-    @Autowired
-    private DeliveryPointRepository deliveryPointRepository;
 
     @Transactional
-    public void create(CreateRoadRequestDTO dto, UUID companyId) {
+    public Road create(CreateRoadRequestDTO dto, UUID companyId) {
         this.roadRepository.findByNameAndCompanyId(dto.name(), companyId).ifPresent((user) -> { throw new MessageBadRequestException("Trajeto com mesmo nome já existe"); });
 
         Optional<Company> company = Optional.ofNullable(
@@ -47,6 +43,8 @@ public class RoadService {
         road.setCompany(company.get());
 
         this.roadRepository.save(road);
+
+        return road;
     }
 
     @Transactional(readOnly = true)
@@ -66,7 +64,7 @@ public class RoadService {
     }
 
     @Transactional
-    public void update(UpdateRoadRequestDTO dto, Long id) {
+    public Road update(UpdateRoadRequestDTO dto, Long id) {
         Optional<Road> road = Optional.ofNullable(
             this.roadRepository.findById(id).orElseThrow(
                 () -> new MessageNotFoundException("Trajeto não encontrada")
@@ -78,6 +76,8 @@ public class RoadService {
         });
     
         this.roadRepository.save(road.get());
+
+        return road.get();
     }
 
     @Transactional
@@ -90,9 +90,6 @@ public class RoadService {
 
         List<Route> routes = this.routeRepository.findByRoad(id);
         this.routeRepository.deleteAll(routes);
-
-        List<DeliveryPoint> deliveryPoints = this.deliveryPointRepository.findByRoad(id);
-        this.deliveryPointRepository.deleteAll(deliveryPoints);
 
         this.roadRepository.delete(road.get());
     }

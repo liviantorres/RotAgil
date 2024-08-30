@@ -23,6 +23,6 @@ public class DeliveryPoint {
     @NotNull
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "road_id")
-    private Road road;
+    @JoinColumn(name = "company_id")
+    private Company company;
 }

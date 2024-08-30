@@ -89,7 +89,7 @@ public class RouteService {
     }
 
     @Transactional
-    public void create(CreateRouteRequestDTO dto) {
+    public RouteResponseDTO create(CreateRouteRequestDTO dto) {
 
         if (dto.initialDeliveryPointId().equals(dto.destinationDeliveryPointId()))
             throw new MessageBadRequestException("Ponto de entrega inicial não pode ser igual ao Ponto de entrega final");
@@ -121,10 +121,17 @@ public class RouteService {
         route.setRoad(road.get());
 
         routeRepository.save(route);
+
+        return new RouteResponseDTO(
+                route.getId(),
+                initialDeliveryPoint.get(),
+                destinationDeliveryPoint.get(),
+                route.getDistance()
+        );
     }
 
     @Transactional
-    public void update(UpdateRouteRequestDTO dto, Long id) {
+    public RouteResponseDTO update(UpdateRouteRequestDTO dto, Long id) {
 
         if (dto.initialDeliveryPointId().equals(dto.destinationDeliveryPointId()))
             throw new MessageBadRequestException("Ponto de entrega inicial não pode ser igual ao Ponto de entrega final");
@@ -153,6 +160,13 @@ public class RouteService {
         route.get().setDistance(dto.distance());
 
         this.routeRepository.save(route.get());
+
+        return new RouteResponseDTO(
+                route.get().getId(),
+                initialDeliveryPoint.get(),
+                destinationDeliveryPoint.get(),
+                route.get().getDistance()
+        );
     }
 
     @Transactional

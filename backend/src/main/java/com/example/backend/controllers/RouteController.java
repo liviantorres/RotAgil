@@ -56,7 +56,7 @@ public class RouteController {
     @PostMapping
     @Operation(summary = "Criar rota", description = "Essa função é responsável por criar uma nova rota")
     @ApiResponses({
-            @ApiResponse(responseCode = "201"),
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = RouteResponseDTO.class))}),
             @ApiResponse(responseCode = "400", description = "Ponto de entrega inicial não pode ser igual ao Ponto de entrega final", content =
             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageExceptionHandlerDTO.class))),
             @ApiResponse(responseCode = "404", description = "Trajeto não encontrado", content =
@@ -64,15 +64,15 @@ public class RouteController {
             @ApiResponse(responseCode = "400", content = { @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ErrorMessageDTO.class))) })
     })
     @SecurityRequirement(name = "jwt_auth")
-    public ResponseEntity create(@Valid @RequestBody CreateRouteRequestDTO dto) {
-        routeService.create(dto);
-        return new ResponseEntity(HttpStatus.CREATED);
+    public ResponseEntity<RouteResponseDTO> create(@Valid @RequestBody CreateRouteRequestDTO dto) {
+        RouteResponseDTO response = routeService.create(dto);
+        return ResponseEntity.ok().body(response);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Editar rota", description = "Essa função é responsável por editar uma rota pelo id")
     @ApiResponses({
-            @ApiResponse(responseCode = "204"),
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = RouteResponseDTO.class))}),
             @ApiResponse(responseCode = "400", description = "Ponto de entrega inicial não pode ser igual ao Ponto de entrega final", content =
             @Content(mediaType = "application/json", schema = @Schema(implementation = MessageExceptionHandlerDTO.class))),
             @ApiResponse(responseCode = "404", description = "Rota não encontrada", content =
@@ -80,11 +80,11 @@ public class RouteController {
             @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ErrorMessageDTO.class))))
     })
     @SecurityRequirement(name = "jwt_auth")
-    public ResponseEntity update(@PathVariable Long id, @Valid @RequestBody UpdateRouteRequestDTO dto) {
+    public ResponseEntity<RouteResponseDTO> update(@PathVariable Long id, @Valid @RequestBody UpdateRouteRequestDTO dto) {
 
-        routeService.update(dto, id);
+        RouteResponseDTO response = routeService.update(dto, id);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/{id}")

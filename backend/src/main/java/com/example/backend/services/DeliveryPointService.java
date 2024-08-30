@@ -2,12 +2,12 @@ package com.example.backend.services;
 
 import com.example.backend.dtos.CreateDeliveryPointRequestDTO;
 import com.example.backend.dtos.UpdateDeliveryPointRequestDTO;
+import com.example.backend.entities.Company;
 import com.example.backend.entities.DeliveryPoint;
-import com.example.backend.entities.Road;
 import com.example.backend.exceptions.types.MessageBadRequestException;
 import com.example.backend.exceptions.types.MessageNotFoundException;
+import com.example.backend.repositories.CompanyRepository;
 import com.example.backend.repositories.DeliveryPointRepository;
-import com.example.backend.repositories.RoadRepository;
 import com.example.backend.repositories.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class DeliveryPointService {
@@ -22,9 +23,9 @@ public class DeliveryPointService {
     @Autowired
     private DeliveryPointRepository deliveryPointRepository;
     @Autowired
-    private RoadRepository roadRepository;
-    @Autowired
     private RouteRepository routeRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @Transactional(readOnly = true)
     public DeliveryPoint getById(Long id) {
@@ -38,30 +39,32 @@ public class DeliveryPointService {
     }
 
     @Transactional(readOnly = true)
-    public List<DeliveryPoint> getAllByRoadId(Long roadId) {
-        return deliveryPointRepository.findByRoad(roadId);
+    public List<DeliveryPoint> getAllByCompany(UUID companyId) {
+        return deliveryPointRepository.findAllByCompany(companyId);
     }
 
     @Transactional
-    public void create(CreateDeliveryPointRequestDTO dto) {
+    public DeliveryPoint create(CreateDeliveryPointRequestDTO dto, UUID companyId) {
         this.deliveryPointRepository.findByNameAndAddress(dto.name(), dto.address()).ifPresent((user) -> { throw new MessageBadRequestException("Ponto de entrega já cadastrado"); });
 
-        Optional<Road> road = Optional.ofNullable(
-                this.roadRepository.findById(dto.roadId()).orElseThrow(
-                        () -> new MessageNotFoundException("Rota não encontrada")
-                )
-        );
+        Optional<Company> company = Optional.ofNullable(
+                this.companyRepository.findById(companyId)
+                        .orElseThrow(
+                                () -> new MessageNotFoundException("Empresa não encontrada")
+                        ));
 
         DeliveryPoint deliveryPoint = new DeliveryPoint();
         deliveryPoint.setName(dto.name());
         deliveryPoint.setAddress(dto.address());
-        deliveryPoint.setRoad(road.get());
+        deliveryPoint.setCompany(company.get());
 
         this.deliveryPointRepository.save(deliveryPoint);
+
+        return deliveryPoint;
     }
 
     @Transactional
-    public void update(UpdateDeliveryPointRequestDTO dto, Long id) {
+    public DeliveryPoint update(UpdateDeliveryPointRequestDTO dto, Long id) {
         Optional<DeliveryPoint> deliveryPoint = Optional.ofNullable(
                 this.deliveryPointRepository.findById(id)
                         .orElseThrow(
@@ -74,6 +77,8 @@ public class DeliveryPointService {
             deliveryPoint.get().setAddress(dto.address());
 
         this.deliveryPointRepository.save(deliveryPoint.get());
+
+        return deliveryPoint.get();
     }
 
     @Transactional
