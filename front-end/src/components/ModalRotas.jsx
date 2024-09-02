@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { FaTimes } from 'react-icons/fa';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -8,7 +9,7 @@ const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,52 +19,80 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 30px;
+  border-radius: 10px;
   width: 500px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  transition: all 0.3s ease-in-out;
 `;
 
 const ModalHeader = styled.h2`
-  margin: 0;
-  margin-bottom: 20px;
-  text-align: center;
+  margin: 0 0 20px;
+  font-size: 1.5em;
+  text-align: left;
   color: #252525;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
 `;
 
 const ModalLabel = styled.label`
   display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #252525;
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 5px;
+  margin-top: 10px;
 `;
 
 const ModalSelect = styled.select`
   width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border-radius: 4px;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
   border: 1px solid #ccc;
-  font-size: 16px;
+  box-sizing: border-box;
+  font-size: 0.9em;
+  color: #333;
+  background-color: #fafafa;
+
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+  }
 `;
 
 const ModalInput = styled.input`
   width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border-radius: 4px;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
   border: 1px solid #ccc;
-  font-size: 16px;
+  box-sizing: border-box;
+  font-size: 0.9em;
+  color: #333;
+  background-color: #fafafa;
+
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+  }
 `;
 
 const ModalButton = styled.button`
   background-color: ${(props) => props.bgColor || '#354B57'};
   color: #fff;
-  padding: 10px 20px;
+  padding: 12px;
+  width: 70%;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-size: 1em;
+  margin-top: 10px;
+  display: inline-block;
+  text-align: center;
+
   &:hover {
     background-color: ${(props) => props.hoverColor || '#2a3b44'};
   }
@@ -71,7 +100,24 @@ const ModalButton = styled.button`
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #bbb;
+  font-size: 20px;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #333;
+  }
 `;
 
 const ModalAdicionarRota = ({ onClose, onSave, pontos }) => {
@@ -114,6 +160,7 @@ const ModalAdicionarRota = ({ onClose, onSave, pontos }) => {
   return (
     <ModalOverlay>
       <ModalContent>
+        <CloseButton onClick={onClose}><FaTimes /></CloseButton>
         <ModalHeader>Adicionar Rota</ModalHeader>
         <ModalLabel htmlFor="ponto1">Ponto de Entrega 1 *</ModalLabel>
         <ModalSelect
@@ -150,13 +197,6 @@ const ModalAdicionarRota = ({ onClose, onSave, pontos }) => {
 
         <ButtonContainer>
           <ModalButton onClick={handleSave}>Salvar</ModalButton>
-          <ModalButton 
-            bgColor="#6F6F6F" 
-            hoverColor="#5a5a5a"
-            onClick={onClose}
-          >
-            Cancelar
-          </ModalButton>
         </ButtonContainer>
       </ModalContent>
     </ModalOverlay>

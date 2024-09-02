@@ -8,6 +8,7 @@ import Login from "../pages/Login";
 import Trajetos from "../pages/Trajetos";
 import Perfil from "../pages/Perfil";
 import Rotas from "../pages/Rotas";
+import Pontos from "../pages/Pontos"
 
 const Paths = () => {
   return (
@@ -31,6 +32,9 @@ const Paths = () => {
           </Route>
           <Route path="/rotas/:trajetoId" element={<PageLayout NavType="home" />}>
             <Route index element={<Rotas />} />
+          </Route>
+          <Route path="/pontos/" element={<PageLayout NavType="home" />}>
+            <Route index element={<Pontos />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

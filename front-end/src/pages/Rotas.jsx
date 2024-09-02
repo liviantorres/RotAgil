@@ -121,7 +121,7 @@ const ExcluirButton = styled.button`
 
 const Rotas = () => {
     const { trajetoId } = useParams();
-    const navigate = useNavigate(); // Para redirecionar após a exclusão
+    const navigate = useNavigate(); 
     const [routes, setRoutes] = useState([]);
     const [nomeTrajeto, setNomeTrajeto] = useState("");
     const [pontos, setPontos] = useState([]);
