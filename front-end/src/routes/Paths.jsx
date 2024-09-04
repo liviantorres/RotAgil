@@ -9,6 +9,7 @@ import Trajetos from "../pages/Trajetos";
 import Perfil from "../pages/Perfil";
 import Rotas from "../pages/Rotas";
 import Pontos from "../pages/Pontos"
+import Percurso from "../pages/Percurso";
 
 const Paths = () => {
   return (
@@ -33,8 +34,11 @@ const Paths = () => {
           <Route path="/rotas/:trajetoId" element={<PageLayout NavType="home" />}>
             <Route index element={<Rotas />} />
           </Route>
-          <Route path="/pontos/" element={<PageLayout NavType="home" />}>
+          <Route path="/pontos" element={<PageLayout NavType="home" />}>
             <Route index element={<Pontos />} />
+          </Route>
+          <Route path="/percurso" element={<PageLayout NavType="home" />}>
+            <Route index element={<Percurso />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { FaTimes } from 'react-icons/fa';
+import {useParams} from 'react-router-dom'
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -124,6 +125,7 @@ const ModalAdicionarRota = ({ onClose, onSave, pontos }) => {
   const [ponto1, setPonto1] = useState('');
   const [ponto2, setPonto2] = useState('');
   const [distancia, setDistancia] = useState('');
+  const { trajetoId } = useParams();
 
   const handleSave = async () => {
     const token = localStorage.getItem('authToken');
@@ -131,19 +133,19 @@ const ModalAdicionarRota = ({ onClose, onSave, pontos }) => {
       console.error('Token de acesso não encontrado!');
       return;
     }
-
     try {
       const response = await axios.post('http://localhost:8080/route', {
-        ponto1,
-        ponto2,
-        distancia,
+        roadId: trajetoId,  
+        initialDeliveryPointId: parseInt(ponto1),  
+        destinationDeliveryPointId: parseInt(ponto2),  
+        distance: parseFloat(distancia), 
       }, {
         headers: {
           'Authorization': `Bearer ${token}`,
         }
       });
-
-      if (response.status === 201) {
+  
+      if (response.status === 200) {
         onSave(response.data);
         setPonto1('');
         setPonto2('');
@@ -170,7 +172,7 @@ const ModalAdicionarRota = ({ onClose, onSave, pontos }) => {
         >
           <option value="">Selecione um ponto</option>
           {pontos.map((ponto, index) => (
-            <option key={index} value={ponto}>{ponto}</option>
+            <option key={index} value={ponto.id}>{ponto.name}</option>
           ))}
         </ModalSelect>
 
@@ -182,7 +184,7 @@ const ModalAdicionarRota = ({ onClose, onSave, pontos }) => {
         >
           <option value="">Selecione um ponto</option>
           {pontos.map((ponto, index) => (
-            <option key={index} value={ponto}>{ponto}</option>
+            <option key={index} value={ponto.id}>{ponto.name}</option>
           ))}
         </ModalSelect>
 
