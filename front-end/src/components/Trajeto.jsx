@@ -36,18 +36,12 @@ const LinhaHorizontal = styled.hr`
   margin: 10px 0;
 `;
 
-const Texto = styled.p`
-  font-size: 18px;
-  margin: 0;
-`;
 
-const Trajeto = ({ nomeTrajeto, rotas, onClick }) => {
-  const rotasCount = rotas ? rotas.length : 0; 
+const Trajeto = ({ nomeTrajeto, onClick }) => { 
   return (
     <ContainerTrajeto onClick={onClick}>
       <Titulo>{nomeTrajeto}</Titulo>
       <LinhaHorizontal />
-      <Texto>{rotasCount} rotas</Texto>
     </ContainerTrajeto>
   );
 };

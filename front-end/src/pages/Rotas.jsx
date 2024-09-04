@@ -3,13 +3,16 @@ import styled from "styled-components";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import ModalAdicionarRota from "../components/ModalRotas";
+import { FiEdit2 } from 'react-icons/fi';
+import { FaRegTrashAlt } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 
 const ContainerRotas = styled.div`
   background-color: #252525;
   height: 100vh;
   padding: 20px;
   color: #ffffff;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 `;
 
 const Titulo = styled.h1`
@@ -49,7 +52,7 @@ const ControleRota = styled.div`
   }
 
   button {
-    background-color: #354B57;
+    background-color: #354b57;
     color: #ffffff;
     padding: 8px 12px;
     border: none;
@@ -76,24 +79,39 @@ const TabelaPontos = styled.div`
     overflow: hidden;
   }
 
-  th, td {
+  th,
+  td {
     padding: 10px;
-    border: none; 
+    border: none;
     text-align: left;
   }
 
   th {
-    background-color: #354B57;
+    background-color: #354b57;
     font-weight: bold;
   }
 
   td {
     background-color: #2c2f2f;
   }
+  .action-icons {
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .action-icons svg {
+    color: #ffffff;
+    transition: color 0.3s;
+  }
+
+  .action-icons svg:hover {
+    color: #e74c3c; 
+  }
 `;
 
 const ExcluirButton = styled.button`
-  background-color: #D9534F;
+  background-color: #d9534f;
   color: #ffffff;
   padding: 6px 8px;
   border: none;
@@ -106,7 +124,7 @@ const ExcluirButton = styled.button`
   justify-content: center;
   gap: 8px;
   margin-top: 20px;
-  float: right; 
+  float: right;
 
   &:hover {
     background-color: #c9302c;
@@ -114,144 +132,181 @@ const ExcluirButton = styled.button`
   }
 
   img {
-    width: 16px; 
+    width: 16px;
     height: 16px;
   }
 `;
 
 const Rotas = () => {
-    const { trajetoId } = useParams();
-    const navigate = useNavigate(); // Para redirecionar após a exclusão
-    const [routes, setRoutes] = useState([]);
-    const [nomeTrajeto, setNomeTrajeto] = useState("");
-    const [pontos, setPontos] = useState([]);
-    const [selectedPonto, setSelectedPonto] = useState("");
-    const [loading, setLoading] = useState(true);  
-    const [error, setError] = useState(null);
-    const [showModal, setShowModal] = useState(false);
+  const { trajetoId } = useParams();
+  const navigate = useNavigate();
+  const [routes, setRoutes] = useState([]);
+  const [nomeTrajeto, setNomeTrajeto] = useState("");
+  const [pontos, setPontos] = useState([]);
+  const [selectedPonto, setSelectedPonto] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPontoInicial, setSelectedPontoInicial] = useState("");
+  const [selectedPontoDestino, setSelectedPontoDestino] = useState("");
 
-    useEffect(() => {
-        const fetchRoutes = async () => {
-            const token = localStorage.getItem('authToken');
-            try {
-                const trajetoNomeResponse = await axios.get(`http://localhost:8080/road/${trajetoId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                setNomeTrajeto(trajetoNomeResponse.data.name);
+  useEffect(() => {
+    const fetchRoutes = async () => {
+      const token = localStorage.getItem("authToken");
+      try {
+        const responsePontos = await axios.get(
+          `http://localhost:8080/deliverypoint`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-                const response = await axios.get(`http://localhost:8080/route/road/${trajetoId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+        setPontos(responsePontos.data);
 
-                if (Array.isArray(response.data.rotas)) {
-                    setRoutes(response.data.rotas);
-                    const pontosUnicos = [
-                        ...new Set(response.data.rotas.flatMap(route => [route.ponto1, route.ponto2]))
-                    ];
-                    setPontos(pontosUnicos);
-                } else {
-                    console.error("Dados recebidos não são um array:", response.data.rotas);
-                    setRoutes([]);
-                }
-            } catch (error) {
-                console.error("Erro ao buscar rotas:", error);
-                setError("Não foi possível carregar as rotas.");
-            } finally {
-                setLoading(false);
-            }
-        };
+        const trajetoNomeResponse = await axios.get(
+          `http://localhost:8080/road/${trajetoId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setNomeTrajeto(trajetoNomeResponse.data.name);
 
-        fetchRoutes();
-    }, [trajetoId]);
+        const response = await axios.get(
+          `http://localhost:8080/route/road/${trajetoId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-    const handleSelectChange = (event) => {
-        setSelectedPonto(event.target.value);
+        setRoutes(response.data);
+
+      } catch (error) {
+        console.error("Erro ao buscar rotas:", error);
+        setError("Não foi possível carregar as rotas.");
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const handleOpenModal = () => setShowModal(true);
-    const handleCloseModal = () => setShowModal(false);
-    const handleSaveRoute = (newRoute) => {
-        setRoutes([...routes, newRoute]);
-    };
+    fetchRoutes();
+  }, [trajetoId]);
 
-    const handleDelete = async () => {
-        const token = localStorage.getItem('authToken');
-        try {
-            await axios.delete(`http://localhost:8080/road/${trajetoId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-           
-            navigate('/trajetos'); 
-        } catch (error) {
-            console.error("Erro ao excluir o trajeto:", error);
-            setError("Não foi possível excluir o trajeto.");
+  const handleNavigateToPercurso = () => {
+    if (selectedPontoInicial && selectedPontoDestino) {
+      navigate('/percurso', {
+        state: {
+          roadId: trajetoId, 
+          initialDeliveryPointId: parseInt(selectedPontoInicial, 10),
+          destinationDeliveryPointId: parseInt(selectedPontoDestino, 10)
         }
-    };
+      });
+    } else {
+      alert("Por favor, selecione um ponto inicial e um ponto de destino.");
+    }
+  };
+  
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+  const handleSaveRoute = (newRoute) => {
+    setRoutes([...routes, newRoute]);
+  };
 
-    if (loading) return <p>Carregando...</p>;
-    if (error) return <p>{error}</p>;
+  const handleDelete = async () => {
+    const token = localStorage.getItem("authToken");
+    try {
+      await axios.delete(`http://localhost:8080/road/${trajetoId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    return (
-        <ContainerRotas>
-            <Titulo>Trajeto: {nomeTrajeto}</Titulo>
-            <LinhaHorizontal />
-            <ControleRota>
-                <p>Ponto de partida:</p>
-                <select value={selectedPonto} onChange={handleSelectChange}>
-                    {pontos.map((ponto, index) => (
-                        <option key={index} value={ponto}>{ponto}</option>
-                    ))}
-                </select>
-                <button>Pontos de Entrega</button>
-                <button onClick={handleOpenModal}>Adicionar Rota</button>
-                <button>Gerar Percurso</button>
-            </ControleRota>
-            <TabelaPontos>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Ponto 1</th>
-                            <th>Ponto 2</th>
-                            <th>Distância (km)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {routes.length > 0 ? (
-                            routes.map((route, index) => (
-                                <tr key={index}>
-                                    <td>{route.ponto1}</td>
-                                    <td>{route.ponto2}</td>
-                                    <td>{route.distancia}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="3">Nenhuma rota encontrada.</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </TabelaPontos>
-            <ExcluirButton onClick={handleDelete}>
-                <img src="/lixeira.svg" alt="Excluir" />
-                Excluir Trajeto
-            </ExcluirButton>
+      navigate("/trajetos");
+    } catch (error) {
+      console.error("Erro ao excluir o trajeto:", error);
+      setError("Não foi possível excluir o trajeto.");
+    }
+  };
 
-            {showModal && (
-                <ModalAdicionarRota 
-                    onClose={handleCloseModal} 
-                    onSave={handleSaveRoute} 
-                    pontos={pontos} 
-                />
+  if (loading) return <p>Carregando...</p>;
+  if (error) return <p>{error}</p>;
+
+  return (
+    <ContainerRotas>
+      <Titulo>Trajeto: {nomeTrajeto}</Titulo>
+      <LinhaHorizontal />
+      <ControleRota>
+      <p>Ponto de partida:</p>
+        <select value={selectedPontoInicial} onChange={(e) => setSelectedPontoInicial(e.target.value)}>
+          {pontos.map((ponto) => (
+            <option key={ponto.id} value={ponto.id}>
+              {ponto.name}
+            </option>
+          ))}
+        </select>
+        <p>Ponto de destino:</p>
+        <select value={selectedPontoDestino} onChange={(e) => setSelectedPontoDestino(e.target.value)}>
+          {pontos.map((ponto) => (
+            <option key={ponto.id} value={ponto.id}>
+              {ponto.name}
+            </option>
+          ))}
+        </select>
+        <button onClick={handleNavigateToPercurso}>Gerar Percurso</button>
+        <button onClick={handleOpenModal}>Adicionar Rota</button>
+      </ControleRota>
+      <TabelaPontos>
+        <table>
+          <thead>
+            <tr>
+              <th>Ponto Inicial</th>
+              <th>Ponto Destino</th>
+              <th>Distância (km)</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {routes.length > 0 ? (
+              routes.map((route, index) => (
+                <tr key={index}>
+                  <td>{route.initialDeliveryPoint.name}</td>
+                  <td>{route.destinationDeliveryPoint.name}</td>
+                  <td>{route.distance}</td>
+                  <td>
+                    <div className="action-icons">
+                      <FiEdit2 onClick={() => handleEdit(index)} />
+                      <FaRegTrashAlt onClick={() => (index)} />
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3">Nenhuma rota encontrada.</td>
+              </tr>
             )}
-        </ContainerRotas>
-    );
-}
+          </tbody>
+        </table>
+      </TabelaPontos>
+      <ExcluirButton onClick={handleDelete}>
+        <img src="/lixeira.svg" alt="Excluir" />
+        Excluir Trajeto
+      </ExcluirButton>
+
+      {showModal && (
+        <ModalAdicionarRota
+          onClose={handleCloseModal}
+          onSave={handleSaveRoute}
+          pontos={pontos}
+        />
+      )}
+    </ContainerRotas>
+  );
+};
 
 export default Rotas;

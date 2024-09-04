@@ -79,6 +79,8 @@ const Trajetos = () => {
             'Authorization': `Bearer ${token}`
           }
         });
+
+        
         setTrajetos(response.data); 
         console.log('Trajetos recebidos:', response.data); 
       } catch (error) {
@@ -121,7 +123,6 @@ const Trajetos = () => {
           <Trajeto
             key={trajeto.id} 
             nomeTrajeto={trajeto.name}
-            rotas={trajeto.rotas || []} 
             onClick={() => handleTrajetoClick(trajeto.id)} 
           />
         ))}
