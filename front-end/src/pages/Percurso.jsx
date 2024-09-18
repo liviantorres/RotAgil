@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Graph } from 'react-d3-graph';
 import axios from 'axios';
 import styled from 'styled-components';
+import { DataSet, Network } from 'vis-network/standalone';
 
 const ContainerPercurso = styled.div`
   background-color: #252525;
@@ -39,6 +39,8 @@ const ContainerGrafo = styled.div`
   background-color: #343838;
   border-radius: 6px;
   padding: 20px;
+  width: 100%;
+  height: 500px; 
 `;
 
 const ContainerPontos = styled.div`
@@ -76,33 +78,8 @@ const DistanciaTotal = styled.div`
   background-color: #4A4E4E;
   padding: 20px;
   border-radius: 7px;
-  & span{
+  & span {
     font-weight: 400;
-  }
-`;
-const Legenda = styled.div`
-  background-color: #2A2D2D;
-  border-radius: 6px;
-  padding: 10px;
-  
-  right: 20px;
-  top: 20px;
-  color: #ffffff;
-  width: 200px;
-  font-size: 14px;
-`;
-
-const CorLeganda = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-
-  span {
-    width: 20px;
-    height: 9px;
-    border-radius: 0%;
-    display: inline-block;
-    margin-right: 10px;
   }
 `;
 
@@ -111,6 +88,8 @@ const Percurso = () => {
   const [percurso, setPercurso] = useState(null);
   const [rotas, setRotas] = useState([]);
   const [error, setError] = useState(null);
+
+  const networkRef = useRef(null);
 
   useEffect(() => {
     const fetchPercurso = async () => {
@@ -158,6 +137,103 @@ const Percurso = () => {
     fetchRotas();
   }, [location.state]);
 
+  useEffect(() => {
+    if (rotas.length > 0 && percurso) {
+      // Prepare data for the graph
+      const nodes = [];
+      const edges = [];
+
+      rotas.forEach(rota => {
+        const initialPoint = rota.initialDeliveryPoint.name;
+        const destinationPoint = rota.destinationDeliveryPoint.name;
+
+        if (!nodes.find(node => node.id === initialPoint)) {
+          nodes.push({
+            id: initialPoint,
+            label: initialPoint,
+            color: '#444', 
+          });
+        }
+
+        if (!nodes.find(node => node.id === destinationPoint)) {
+          nodes.push({
+            id: destinationPoint,
+            label: destinationPoint,
+            color: '#444', 
+          });
+        }
+
+        const isPartOfPercurso = percurso.deliveryPoints.some(
+          (ponto, index) => {
+            const nextPoint = percurso.deliveryPoints[index + 1];
+            return nextPoint && rota.initialDeliveryPoint.name === ponto.name && rota.destinationDeliveryPoint.name === nextPoint.name;
+          }
+        );
+
+        edges.push({
+          from: rota.initialDeliveryPoint.name,
+          to: rota.destinationDeliveryPoint.name,
+          label: `${rota.distance} km`,
+          color: isPartOfPercurso ? '#FF4A4A' : '#FFFFFF', 
+        });
+      });
+
+      const data = {
+        nodes: new DataSet(nodes),
+        edges: new DataSet(edges),
+      };
+
+      const options = {
+        nodes: {
+          shape: 'dot',
+          size: 30,
+          font: {
+            size: 16, 
+            color: '#ffffff',
+            face: 'arial', 
+            background: 'none', 
+            strokeWidth: 0, 
+            strokeColor: 'none', 
+          },
+          borderWidth: 2, 
+          color: { background: '#343838', border: '#444' },
+          
+        },
+        edges: {
+        
+          font: { size: 16, 
+            color: '#ffffff72', 
+            face: 'arial', 
+            background: 'none',
+            strokeWidth: 0, 
+            strokeColor: 'none', 
+          },
+          arrows: {
+            to: { enabled: true, scaleFactor: 1 },
+          },
+        },
+        layout: {
+          hierarchical: false,
+        },
+        physics: {
+          enabled: false,
+        },
+        interaction: {
+          dragNodes: true, 
+          zoomView: false, 
+          hover: true, 
+          selectConnectedEdges: false, 
+          navigationButtons: false, 
+          selectable: true, 
+        },
+      };
+
+      if (networkRef.current) {
+        new Network(networkRef.current, data, options);
+      }
+    }
+  }, [rotas, percurso]);
+
   if (error) {
     return <p>{error}</p>;
   }
@@ -166,96 +242,13 @@ const Percurso = () => {
     return <p>Carregando percurso...</p>;
   }
 
-
-  const nodes = [];
-  rotas.forEach(rota => {
-    const initialPoint = rota.initialDeliveryPoint.name;
-    const destinationPoint = rota.destinationDeliveryPoint.name;
-
-    if (!nodes.find(node => node.id === initialPoint)) {
-      nodes.push({
-        id: initialPoint,
-        label: initialPoint,
-        color: '#444', 
-        fontColor: '#ffffff',
-        size: 3000, 
-        labelPosition: 'center'
-      });
-    }
-
-    if (!nodes.find(node => node.id === destinationPoint)) {
-      nodes.push({
-        id: destinationPoint,
-        label: destinationPoint,
-        color: '#444', 
-        fontColor: '#ffffff',
-        size: 3000, 
-        labelPosition: 'center'
-      });
-    }
-  });
-
-  const links = rotas.map(rota => {
-    const isPartOfPercurso = percurso.deliveryPoints.some(
-      (ponto, index) => {
-        const nextPoint = percurso.deliveryPoints[index + 1];
-        return nextPoint && rota.initialDeliveryPoint.name === ponto.name && rota.destinationDeliveryPoint.name === nextPoint.name;
-      }
-    );
-
-    return {
-      source: rota.initialDeliveryPoint.name,
-      target: rota.destinationDeliveryPoint.name,
-      label: `${rota.distance} km`,
-      color: isPartOfPercurso ? '#FF4A4A' : '#FFFFFF', 
-      fontSize: 15,
-      renderLabel: true,
-      fontColor: '#FFFFFF', 
-    };
-  });
-
-  const graphConfig = {
-    nodeHighlightBehavior: true,
-    node: {
-      color: '#444', 
-      size: 1200,
-      fontSize: 16,
-      highlightStrokeColor: '#ff4a4a2a',
-    },
-    link: {
-      highlightColor: '#d8ff4a',
-      renderLabel: true,
-      fontColor: '#FFFFFF',
-    },
-    directed: true,
-    automaticRearrangeAfterDropNode: true,
-    staticGraph: false,
-  };
-
   return (
     <ContainerPercurso>
       <Titulo>Percurso</Titulo>
       <LinhaHorizontal />
       <ContainerGeral>
         <ContainerGrafo>
-          <Graph
-            id="graph-id"
-            data={{ nodes, links }}
-            config={graphConfig}
-            onClickNode={nodeId => console.log(`${nodeId}`)}
-            onClickLink={(source, target) => console.log(`${source} e ${target}`)}
-          />
-          <Legenda>
-            <CorLeganda>
-              <span style={{ backgroundColor: '#FF4A4A' }}></span>
-              Rota do Percurso
-            </CorLeganda>
-            <CorLeganda>
-              <span style={{ backgroundColor: '#FFFFFF' }}></span>
-              Outras Rotas
-            </CorLeganda>
-          </Legenda>
-         
+          <div ref={networkRef} style={{ width: '100%', height: '100%' }} />
         </ContainerGrafo>
         <ContainerPontos>
           <TabelaPontos>
@@ -269,10 +262,8 @@ const Percurso = () => {
                 </tr>
               ))}
             </tbody>
-            <DistanciaTotal>Distância total: <span>{percurso.totalDistance} km </span></DistanciaTotal>
           </TabelaPontos>
-          
-         
+          <DistanciaTotal>Distância total: <span>{percurso.totalDistance} km </span></DistanciaTotal>
         </ContainerPontos>
       </ContainerGeral>
     </ContainerPercurso>

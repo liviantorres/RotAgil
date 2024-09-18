@@ -5,7 +5,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import ModalAdicionarRota from "../components/ModalRotas";
 import { FiEdit2 } from 'react-icons/fi';
 import { FaRegTrashAlt } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import ModalEditarRota from "../components/ModalEditarRota";
+
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal'; 
 
 const ContainerRotas = styled.div`
   background-color: #252525;
@@ -149,6 +151,10 @@ const Rotas = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedPontoInicial, setSelectedPontoInicial] = useState("");
   const [selectedPontoDestino, setSelectedPontoDestino] = useState("");
+  const [showEditModal, setShowEditModal] = useState(false); 
+  const [currentRoute, setCurrentRoute] = useState(null);
+  const [deleteIndex, setDeleteIndex] = useState(null); 
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false); 
 
   useEffect(() => {
     const fetchRoutes = async () => {
@@ -197,6 +203,7 @@ const Rotas = () => {
     fetchRoutes();
   }, [trajetoId]);
 
+  // Funções de adicionar percurso
   const handleNavigateToPercurso = () => {
     if (selectedPontoInicial && selectedPontoDestino) {
       navigate('/percurso', {
@@ -210,6 +217,36 @@ const Rotas = () => {
       alert("Por favor, selecione um ponto inicial e um ponto de destino.");
     }
   };
+
+  //Deletar Rotas
+  const cancelDelete = () => {
+    setConfirmDeleteOpen(false);
+    setDeleteIndex(null);
+  };
+
+  const confirmDelete = async () => {
+    
+    const token = localStorage.getItem("authToken");
+    try {
+      await axios.delete(`http://localhost:8080/route/${deleteIndex}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setConfirmDeleteOpen(false);
+      setRoutes(routes.filter(route => route.id !== deleteIndex));
+      
+    } catch (error) {
+      console.error("Erro ao excluir a rota:", error);
+      setError("Não foi possível excluir a rota.");
+    }
+  };
+
+ const handleDeleteRoute = (id) => {
+  setDeleteIndex(id);
+  setConfirmDeleteOpen(true); 
+};
+
   
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -217,6 +254,27 @@ const Rotas = () => {
     setRoutes([...routes, newRoute]);
   };
 
+
+//Editar Rota
+  const handleOpenEditModal = (route) => {
+    setCurrentRoute(route);
+    setShowEditModal(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setCurrentRoute(null);
+  };
+
+  const handleEditRoute = (updatedRoute) => {
+    setRoutes(routes.map(route => (route.id === updatedRoute.id ? updatedRoute : route)));
+    handleCloseEditModal();
+  };
+
+ 
+
+  
+// Deletar Trajeto
   const handleDelete = async () => {
     const token = localStorage.getItem("authToken");
     try {
@@ -261,38 +319,39 @@ const Rotas = () => {
         <button onClick={handleOpenModal}>Adicionar Rota</button>
       </ControleRota>
       <TabelaPontos>
-        <table>
-          <thead>
-            <tr>
-              <th>Ponto Inicial</th>
-              <th>Ponto Destino</th>
-              <th>Distância (km)</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {routes.length > 0 ? (
-              routes.map((route, index) => (
-                <tr key={index}>
-                  <td>{route.initialDeliveryPoint.name}</td>
-                  <td>{route.destinationDeliveryPoint.name}</td>
-                  <td>{route.distance}</td>
-                  <td>
-                    <div className="action-icons">
-                      <FiEdit2 onClick={() => handleEdit(index)} />
-                      <FaRegTrashAlt onClick={() => (index)} />
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="3">Nenhuma rota encontrada.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </TabelaPontos>
+  <table>
+    <thead>
+      <tr>
+        <th>Ponto Inicial</th>
+        <th>Ponto Destino</th>
+        <th>Distância (km)</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {routes.length > 0 ? (
+        routes.map((route) => (
+          <tr key={route.id}>
+            <td>{route.initialDeliveryPoint.name}</td>
+            <td>{route.destinationDeliveryPoint.name}</td>
+            <td>{route.distance}</td>
+            <td>
+              <div className="action-icons">
+                <FiEdit2 onClick={() => handleOpenEditModal(route)} />
+                <FaRegTrashAlt onClick={() => handleDeleteRoute(route.id)} />
+              </div>
+            </td>
+          </tr>
+        ))
+      ) : (
+        <tr>
+          <td colSpan="4">Nenhuma rota encontrada.</td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+</TabelaPontos>
+
       <ExcluirButton onClick={handleDelete}>
         <img src="/lixeira.svg" alt="Excluir" />
         Excluir Trajeto
@@ -303,6 +362,21 @@ const Rotas = () => {
           onClose={handleCloseModal}
           onSave={handleSaveRoute}
           pontos={pontos}
+        />
+      )}
+      {showEditModal && currentRoute && (
+        <ModalEditarRota
+          onClose={handleCloseEditModal}
+          onSave={handleEditRoute}
+          route={currentRoute}
+          pontos={pontos}
+        />
+      )}
+      {confirmDeleteOpen && (
+        <ConfirmDeleteModal
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+          
         />
       )}
     </ContainerRotas>

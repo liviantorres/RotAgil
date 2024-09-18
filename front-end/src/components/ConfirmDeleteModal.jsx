@@ -29,6 +29,7 @@ const ModalHeader = styled.div`
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 10px;
+  color: #000000;
 `;
 
 const Divider = styled.hr`
@@ -40,6 +41,7 @@ const Divider = styled.hr`
 const ModalBody = styled.div`
   font-size: 16px;
   margin-bottom: 20px;
+  color: #000000;
 `;
 
 const Button = styled.button`
