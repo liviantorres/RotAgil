@@ -93,14 +93,15 @@ const Trajetos = () => {
 
   const handleAddTrajeto = (newTrajeto) => {
     console.log('Novo trajeto recebido:', newTrajeto);
-  
+    
     if (newTrajeto && newTrajeto.id && newTrajeto.name) {
-      setTrajetos((prevTrajetos) => [...prevTrajetos, newTrajeto]);
+      setTrajetos((prevTrajetos) => [newTrajeto, ...prevTrajetos]); // Adicione o novo trajeto ao início da lista
     } else {
       console.error('Trajeto inválido:', newTrajeto);
     }
     setModalOpen(false);
   };
+  
   
 
   const handleTrajetoClick = (id) => {
