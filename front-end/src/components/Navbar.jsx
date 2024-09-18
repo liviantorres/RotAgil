@@ -26,6 +26,7 @@ const LinkItem = styled.h2`
   font-size: 20px;
   padding: 2px;
   margin-left: 14px;
+  
   a {
     color: #fff;
     text-decoration: none;
@@ -40,7 +41,7 @@ const Button = styled.button`
   justify-content: center;
   font-size: 20px;
   font-family: 'Roboto', sans-serif;
-  padding: 10px 50px;
+  padding: 10px 20px;  
   background-color: #3f3f3f;
   color: #fff;
   border: none;
@@ -70,6 +71,7 @@ const ProfileImage = styled.img`
 `;
 
 const Navbar = ({ links, button, profileImage }) => {
+  
   return (
     <NavbarContainer>
       <LinksContainer>
@@ -81,7 +83,7 @@ const Navbar = ({ links, button, profileImage }) => {
       </LinksContainer>
       {profileImage ? (
         <a href={button.href}>
-          <ProfileImage src={profileImage} alt="Profile" />
+          <ProfileImage src='./perfil.svg' alt="Profile" />
         </a>
       ) : (
         <Button onClick={button.onClick}>
@@ -103,7 +105,7 @@ Navbar.propTypes = {
     type: PropTypes.oneOf(['link', 'button']).isRequired,
     href: PropTypes.string,
     onClick: PropTypes.func,
-    text: PropTypes.string.isRequired
+    text: PropTypes.string
   }).isRequired,
   profileImage: PropTypes.string
 };

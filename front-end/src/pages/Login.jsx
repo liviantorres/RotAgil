@@ -15,20 +15,14 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         const token = data.access_token; 
-
-        
         localStorage.setItem('authToken', token);
-
-        alert('Login bem-sucedido!');
-       
-       
         window.location.href = '/trajetos';
+
       } else {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Erro ao fazer login');
       }
     } catch (error) {
-      alert(error.message);
       throw error; 
     }
   };
