@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from 'react-router-dom';
 
 const ContainerPerfil = styled.div`
   background-color: #252525;
@@ -159,6 +160,38 @@ const Perfil = () => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
+  const [conta, setConta] = useState({
+    dominio: "Universidade Federal do Ceará",
+    email: "andre123@email.com",
+    senha: "1234",
+  });
+
+  const [dominio, setDominio] = useState(conta.dominio);
+  const [email, setEmail] = useState(conta.email);
+  const [senha, setSenha] = useState(conta.senha);
+
+  const navigate = useNavigate();
+
+  const handleEdit = () => {
+    const novaConta = { dominio, email, senha };
+    setConta(novaConta);
+    console.log("Informações atualizadas:", novaConta);
+  };
+
+  const handleExcluir = () => {
+    const contaVazia = { dominio: "", email: "", senha: "" };
+    setConta(contaVazia);
+    setDominio("");
+    setEmail("");
+    setSenha("");
+    console.log("Conta excluída:", contaVazia); // Exibe no console
+  };
+
+  const handleSair = () => {
+    navigate("/"); // Redireciona para a página inicial
+  };
+
+
   const handleImgClick = () => {
     setShowOverlay(true);
   };
@@ -194,17 +227,32 @@ const Perfil = () => {
         </ImgContainer>
         <InputGroup>
           <Label>Domínio:</Label>
-          <Input type="text" placeholder="Universidade Federal do Ceará" />
+          <Input
+            type="text"
+            value={dominio}
+            onChange={(e) => setDominio(e.target.value)}
+            placeholder="Universidade Federal do Ceará"
+          />
           <Label>Email:</Label>
-          <Input type="text" placeholder="ufc@crateus.ufc.br" />
+          <Input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="andre123@email.com"
+          />
           <Label>Senha:</Label>
-          <Input type="text" value="" placeholder="UFC@78$Ki!" />
+          <Input
+            type="password"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+            placeholder="1234"
+          />
         </InputGroup>
         <ButtonGroup>
-          <BotaoEditar>Editar</BotaoEditar>
-          <BotaoSair>Sair</BotaoSair>
+        <BotaoEditar onClick={handleEdit}>Editar</BotaoEditar>
+        <BotaoSair onClick={handleSair}>Sair</BotaoSair>
         </ButtonGroup>
-        <LinkExcluir onClick={handleConfirmDeleteClick}>Excluir conta</LinkExcluir>
+         <LinkExcluir onClick={handleExcluir}>Excluir conta</LinkExcluir>
       </FormPerfil>
 
       {showOverlay && (
