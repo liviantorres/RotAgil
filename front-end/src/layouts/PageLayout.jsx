@@ -2,13 +2,16 @@ import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import PropTypes from 'prop-types';
 import Navbar from "../components/Navbar";
+import { useNavigate } from 'react-router-dom';
 
 const LayoutContainer = styled.div`
   display: flex;
   height: 100vh;
 `;
 
-const PageLayout = ({ NavType }) => {
+const PageLayout = ({ NavType, userProfileImage }) => { 
+  const navigate = useNavigate();
+
   let links = [
     { href: '/', text: 'Inicio' },
   ];
@@ -19,7 +22,7 @@ const PageLayout = ({ NavType }) => {
     button = {
       type: 'button',
       text: 'Login',
-      onClick: () => alert('Admin Dashboard Clicked')
+      onClick: () => navigate('/login')
     };
   } else if (NavType === 'login') {
     links = [
@@ -30,9 +33,8 @@ const PageLayout = ({ NavType }) => {
     button = {
       type: 'button',
       text: 'Login',
-      onClick: () => alert('Admin Dashboard Clicked')
+      onClick: () => navigate('/login')
     };
-
   } else if (NavType === 'home') {
     links = [
       { href: '/trajetos', text: 'Trajetos' },
@@ -40,12 +42,10 @@ const PageLayout = ({ NavType }) => {
     ];
 
     button = {
-      type: 'link',  
-      href: '/perfil', 
-      text: '',  
+      type: 'link',
+      profileImage: '' ,
+      onClick:()=> navigate('/perfil'),
     };
-
-    button.profileImage = "./perfil.svg"; 
   }
 
   return (
@@ -60,6 +60,7 @@ const PageLayout = ({ NavType }) => {
 
 PageLayout.propTypes = {
   NavType: PropTypes.string.isRequired,
+  userProfileImage: PropTypes.string, 
 };
 
 export default PageLayout;

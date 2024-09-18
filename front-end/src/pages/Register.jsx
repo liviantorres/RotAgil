@@ -17,7 +17,6 @@ const Register = () => {
       });
 
       if (response.status === 201) {
-        alert("Registro bem-sucedido! Você pode agora fazer login.");
         window.location.href = '/login';
       }
     } catch (error) {

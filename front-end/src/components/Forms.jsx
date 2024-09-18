@@ -81,7 +81,9 @@ const ErrorList = styled.ul`
   font-size: smaller;
   list-style: none;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   margin-top: 20px;
 `;
 
@@ -123,7 +125,7 @@ const Forms = ({ type, onSubmit, errors: propErrors }) => {
     } else {
       setErrors([]); 
       onSubmit({ name, email, password }).catch((err) => {
-        setErrors(err.response?.data?.errors || ["Erro ao enviar dados."]);
+        setErrors(err.response?.data?.errors || ["Credenciais Inválidas"]);
       });
     }
   };

@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
+import { FaTimes } from 'react-icons/fa';
+import axios from 'axios';
 
 const ContainerPerfil = styled.div`
   background-color: #252525;
@@ -65,6 +67,7 @@ const OverlayContent = styled.div`
   display: flex;
   flex-direction: column;
   width: 300px;
+  position: absolute;
 `;
 
 const OverlayButton = styled.button`
@@ -80,6 +83,21 @@ const OverlayButton = styled.button`
 
   &:hover {
     background-color: #2a3a40;
+  }
+`;
+const CloseButton = styled.button`
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #bbb;
+  font-size: 20px;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #333;
   }
 `;
 
@@ -159,36 +177,99 @@ const ConfirmacaoExcluir = styled(OverlayContent)`
 const Perfil = () => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-
+  
   const [conta, setConta] = useState({
-    dominio: "Universidade Federal do Ceará",
-    email: "andre123@email.com",
-    senha: "1234",
+    dominio: "",
+    email: "",
+    senha: "",
   });
-
   const [dominio, setDominio] = useState(conta.dominio);
   const [email, setEmail] = useState(conta.email);
   const [senha, setSenha] = useState(conta.senha);
 
+
   const navigate = useNavigate();
 
-  const handleEdit = () => {
-    const novaConta = { dominio, email, senha };
-    setConta(novaConta);
-    console.log("Informações atualizadas:", novaConta);
+  useEffect(() => {
+    const fetchAccountData = async () => {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        console.error('Token de acesso não encontrado!');
+        return;
+      }
+
+      try {
+        const response = await axios.get('http://localhost:8080/company', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (response.status === 200) {
+          const data = response.data;
+          setConta({
+            dominio: data.name,
+            email: data.email,
+            senha: data.password
+          });
+        }
+      } catch (error) {
+        console.error('Erro ao buscar dados da conta:', error);
+      }
+    };
+
+    fetchAccountData();
+  }, []);
+
+  useEffect(() => {
+    setDominio(conta.dominio);
+    setEmail(conta.email);
+    setSenha(conta.senha);
+  }, [conta]);
+
+
+  
+
+  const handleEdit = async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token de acesso não encontrado!');
+      return;
+    }
+    
+    const companyData = {
+      email: email,   
+      name: dominio,            
+      password: senha           
+    };
+  
+    try {
+   
+      const response = await axios.put('http://localhost:8080/company', companyData, {
+        headers: {
+       
+         
+            Authorization: `Bearer ${token}`
+          
+        }
+      });
+  
+      if (response.status === 200) { 
+        alert('Empresa editada com sucesso!');
+      }
+    } catch (error) {
+      console.error('Erro ao editar a empresa:', error);
+      alert('Houve um erro ao editar a empresa.');
+    }
   };
 
   const handleExcluir = () => {
-    const contaVazia = { dominio: "", email: "", senha: "" };
-    setConta(contaVazia);
-    setDominio("");
-    setEmail("");
-    setSenha("");
-    console.log("Conta excluída:", contaVazia); // Exibe no console
+    setShowConfirmDelete(true)
   };
 
   const handleSair = () => {
-    navigate("/"); // Redireciona para a página inicial
+    localStorage.removeItem('authToken');
+  navigate('/'); 
   };
 
 
@@ -204,19 +285,33 @@ const Perfil = () => {
     e.stopPropagation();
   };
 
-  const handleConfirmDeleteClick = () => {
-    setShowConfirmDelete(true);
-  };
 
   const handleDeleteClose = () => {
     setShowConfirmDelete(false);
   };
 
-  const handleDeleteConfirm = () => {
-    alert("Conta excluída!");
-    setShowConfirmDelete(false);
+  const handleDeleteConfirm = async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token de acesso não encontrado!');
+      return;
+    }
+    try {
+      
+      const response = await axios.delete('http://localhost:8080/company', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (response.status === 200) { 
+        alert('Empresa excluída com sucesso!');
+        setShowConfirmDelete(false);
+      }
+    } catch (error) {
+      console.error('Erro ao excluir a empresa:', error);
+      alert('Houve um erro ao excluir a empresa.');
+    }
   };
-
   return (
     <ContainerPerfil>
       <FormPerfil>
@@ -231,21 +326,21 @@ const Perfil = () => {
             type="text"
             value={dominio}
             onChange={(e) => setDominio(e.target.value)}
-            placeholder="Universidade Federal do Ceará"
+            placeholder={conta.dominio}
           />
           <Label>Email:</Label>
           <Input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="andre123@email.com"
+            placeholder={conta.email}
           />
           <Label>Senha:</Label>
           <Input
             type="password"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
-            placeholder="1234"
+            placeholder="*********"
           />
         </InputGroup>
         <ButtonGroup>
@@ -257,7 +352,9 @@ const Perfil = () => {
 
       {showOverlay && (
         <Overlay onClick={handleOverlayClose}>
+       
           <OverlayContent onClick={handleOverlayClick}>
+          <CloseButton onClick={handleOverlayClose}><FaTimes /></CloseButton>
             <Label>URL:</Label>
             <Input placeholder="url" />
             <OverlayButton onClick={handleOverlayClose}>Salvar</OverlayButton>
